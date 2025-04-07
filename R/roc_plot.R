@@ -9,16 +9,17 @@
 #' @param output_path A character string specifying the file path to save the ROC plot.
 #'
 #' @return A ggplot2 object of the ROC curve.
-#'
+#' @importFrom grDevices pdf
 #' @export
-#' 
 #' @examples
 #' # Example usage:
 #' # Assuming you have model outputs, true labels, predicted probabilities, and AUC value
-#' roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
-#' 
+#' \dontrun{
+#'   roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", 
+#'            lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
+#' }
+utils::globalVariables(c("specificity", "sensitivity"))
 roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, output_path) {
-  
   # Check for missing or empty inputs
   if (nrow(model_outputs) == 0 || is.null(model_outputs) || ncol(model_outputs) == 0) {
     stop("Error: Model outputs or columns cannot be empty.")

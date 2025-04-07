@@ -11,3 +11,22 @@ RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://dsci-310-2025.github.io/predictdiabetes/
+Imports: 
+    base,
+    dials,
+    dplyr,
+    ggplot2,
+    parsnip,
+    patchwork,
+    purrr,
+    recipes,
+    rlang,
+    rsample,
+    stats,
+    tibble,
+    tune,
+    vcd,
+    workflows,
+    yardstick,
+    glmnet

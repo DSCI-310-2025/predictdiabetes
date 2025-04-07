@@ -3,7 +3,7 @@
 #' Trains and fits a logistic regression model and cross-validates for optimal 
 #' hyperparameter values
 #'
-#' @param data_frame A data frame or data frame extension (e.g. a tibble).
+#' @param data A data frame or data frame extension (e.g. a tibble).
 #' @param target_col A string specifying the variable of interest.
 #' @param vfolds A number specifying the amount of folds used in k-fold cross-validation (Default = 5).
 #' @param grid_size A number specifying penalty values to test during model tuning (Default = 10).
@@ -11,15 +11,19 @@
 #' @param output_path String path location to save the model as an RDS object.
 #' 
 #' @return An RDS object
-#'
+#' @importFrom dplyr %>%
+#' @importFrom tune tune
+#' @importFrom stats reformulate
 #' @export
 #' 
 #' @examples
 #' \dontrun{
-#'   lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
+#'   lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10,
+#'   tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
 #' }
 #' 
-lr_pipeline <- function(data, target_col, vfolds = 5, grid_size = 10, tuning_metric, output_path) {
+lr_pipeline <- function(data, target_col, vfolds = 5, grid_size = 10,
+                        tuning_metric, output_path) {
   lr_mod <- parsnip::logistic_reg(penalty = tune(), mixture = 1) %>%
     parsnip::set_engine("glmnet") %>%
     parsnip::set_mode("classification")
