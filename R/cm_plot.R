@@ -6,15 +6,20 @@
 #' @param output_path A character string specifying the file path to save the confusion matrix plot.
 #'
 #' @return A ggplot2 object displaying a tile heatmap of the confusion matrix.
-#'
+#' @importFrom grDevices pdf
 #' @export
-#' 
 #' @examples
 #' # Example usage:
 #' # Assuming you have a confusion matrix object from yardstick::conf_mat
 #' \dontrun{
+#'   cm <- data.frame(
+#'     Prediction = c("Positive", "Negative", "Positive", "Negative"),
+#'     Truth = c("Positive", "Positive", "Negative", "Negative"),
+#'     Freq = c(50, 10, 5, 100)
+#'   )
 #'   cm_plot(cm, "confusion_matrix_plot.png")
 #' }
+utils::globalVariables(c("Prediction", "Truth", "Freq"))
 cm_plot <- function(conf_matrix_df, output_path) {
   
   # Check if required columns are present

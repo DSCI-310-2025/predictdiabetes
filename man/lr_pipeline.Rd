@@ -14,6 +14,8 @@ lr_pipeline(
 )
 }
 \arguments{
+\item{data}{A data frame or data frame extension (e.g. a tibble).}
+
 \item{target_col}{A string specifying the variable of interest.}
 
 \item{vfolds}{A number specifying the amount of folds used in k-fold cross-validation (Default = 5).}
@@ -23,8 +25,6 @@ lr_pipeline(
 \item{tuning_metric}{A string specifying the metric used to select for the most optimal model (e.g. "recall").}
 
 \item{output_path}{String path location to save the model as an RDS object.}
-
-\item{data_frame}{A data frame or data frame extension (e.g. a tibble).}
 }
 \value{
 An RDS object
@@ -35,7 +35,8 @@ hyperparameter values
 }
 \examples{
 \dontrun{
-  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
+  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10,
+  tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
 }
 
 }

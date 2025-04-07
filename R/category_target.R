@@ -9,15 +9,14 @@
 #'
 #' @return A data frame with 1 rows per category and 2 columns:
 #'    - Count: Number of occurrances of each category in cat_var.
-#'    - Proportion: Proportion of each category relative to the total number of rows in the data frame.
-#'    
+#'    - Proportion: Proportion of each category relative to the total number of
+#'      rows in the data frame.
+#' @importFrom dplyr %>%
 #' @export
-#' 
 #' @examples
 #' \dontrun{
 #'   category_target(ToothGrowth, ToothGrowth$supp)
 #' }
-#' 
 category_target <- function(data_frame, cat_var) {
   
   if (is.null(data_frame) || nrow(data_frame) == 0) {
