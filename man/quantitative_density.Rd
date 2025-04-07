@@ -44,5 +44,4 @@ fill color.
   # Display the first density plot
   print(density_plots[["mpg"]])
 }
-  
 }
