@@ -15,8 +15,9 @@
 #' @examples
 #' # Example usage:
 #' # Assuming you have model outputs, true labels, predicted probabilities, and AUC value
-#' roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
-#' 
+#' \dontrun{
+  roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
+#' }
 roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, output_path) {
   
   # Check for missing or empty inputs
