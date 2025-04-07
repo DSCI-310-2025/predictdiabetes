@@ -1,0 +1,8 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles: {}
+last_built: 2025-04-07T22:44Z
+urls:
+  reference: https://dsci-310-2025.github.io/predictdiabetes/reference
+  article: https://dsci-310-2025.github.io/predictdiabetes/articles
