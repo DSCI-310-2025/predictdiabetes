@@ -14,79 +14,64 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(predictdiabetes)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(ggplot2)
+library(tools)
 ```
-
-## Overview
-
-The `quantitative_density()` function generates a list of density plots for numeric variables, grouped by a binary or categorical column. This is helpful for exploring variable distributions across groups — for example, diabetic vs non-diabetic patients.
-
-In this vignette, we’ll demonstrate the function using the built-in `mtcars` dataset.
-
----
 
 ## Function Definition
 
-  ```{r}
+```{r define-function}
 quantitative_density <- function(data_frame, noncat_vars, target_col, title_size = 35, axis_size = 30) {
-  # 1. Check that target_col is in data
   if (!target_col %in% colnames(data_frame)) {
     stop(sprintf("Target column '%s' not found in data.", target_col))
   }
-  
-  # 2. Check that all noncat_vars are in data
+
   missing_vars <- setdiff(noncat_vars, colnames(data_frame))
   if (length(missing_vars) > 0) {
-    stop(sprintf("The following vars are missing in data: %s", 
-                 paste(missing_vars, collapse = ", ")))
+    stop(sprintf("The following vars are missing in data: %s", paste(missing_vars, collapse = ", ")))
   }
-  
-  # 3. Check that noncat_vars are numeric
+
   non_numeric <- noncat_vars[!sapply(data_frame[noncat_vars], is.numeric)]
   if (length(non_numeric) > 0) {
-    stop(sprintf("The following vars are not numeric: %s", 
-                 paste(non_numeric, collapse = ", ")))
+    stop(sprintf("The following vars are not numeric: %s", paste(non_numeric, collapse = ", ")))
   }
-  
-  # 4. Check that data_frame is not empty
+
   if (ncol(data_frame) == 0) {
     stop("Data frame has no columns. Cannot plot an empty dataset.")
   }
-  
-  # Generate plots
+
   density_plots <- list()
   for (var in noncat_vars) {
-    p <- ggplot2::ggplot(data_frame, ggplot2::aes(x = !!ggplot2::sym(var), fill = as.factor(!!ggplot2::sym(target_col)))) +
-      ggplot2::geom_density(alpha = 0.5) +
-      ggplot2::scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
-      ggplot2::labs(
+    p <- ggplot(data_frame, aes(x = !!sym(var), fill = as.factor(!!sym(target_col)))) +
+      geom_density(alpha = 0.5) +
+      scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
+      labs(
         title = paste(target_col, "by", var),
         x = var,
         y = "Density",
         fill = tools::toTitleCase(gsub("_", " ", target_col))
       ) +
-      ggplot2::theme_minimal() + 
-      ggplot2::theme(
-        axis.text = ggplot2::element_text(size = axis_size),
-        axis.title = ggplot2::element_text(size = axis_size),
-        plot.title = ggplot2::element_text(size = title_size, face = "bold"),
-        legend.key.size = ggplot2::unit(0.5, "cm"),
-        legend.text = ggplot2::element_text(size = 15),
-        legend.title = ggplot2::element_text(size = 20)
+      theme_minimal() +
+      theme(
+        axis.text = element_text(size = axis_size),
+        axis.title = element_text(size = axis_size),
+        plot.title = element_text(size = title_size, face = "bold"),
+        legend.key.size = unit(0.5, "cm"),
+        legend.text = element_text(size = 15),
+        legend.title = element_text(size = 20)
       )
     density_plots[[var]] <- p
   }
   return(density_plots)
 }
+```
 
+## Generate Plots
 
-```{r generate-plots, echo=TRUE}
-# Load ggplot2 and tools if not already loaded
-library(ggplot2)
-library(tools)
-
-# Generate the density plots
+```{r generate-plots}
 density_plots <- quantitative_density(
   data_frame = mtcars,
   noncat_vars = c("mpg", "hp", "wt"),
@@ -94,7 +79,23 @@ density_plots <- quantitative_density(
   title_size = 20,
   axis_size = 15
 )
+```
+
+## Display MPG Plot
 
 ```{r display-plot-mpg, echo=FALSE}
 density_plots[["mpg"]]
+```
+## Display HP Plot
 
+```{r display-plot-mpg, echo=FALSE}
+density_plots[["hp"]]
+```
+
+
+
+## Display WT Plot
+
+```{r display-plot-mpg, echo=FALSE}
+density_plots[["wt"]]
+```
