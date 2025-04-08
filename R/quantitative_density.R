@@ -7,8 +7,8 @@
 #' @param data_frame A data frame or data frame extension (e.g. a tibble).
 #' @param noncat_vars A vector containing the string name(s) of each **non-categorical** variable to plot on the x-axis.
 #' @param target_col Column of interest to plot each variable against (object).
-#' @param title_size Size of each plot's title (Default = 30).
-#' @param axis_size Size of each plot's axes (Default = 35).
+#' @param title_size Size of each plot's title (Default = 35).
+#' @param axis_size Size of each plot's axes (Default = 30).
 #'
 #' @return A list containing \code{ggplot2} object(s) (density plots).
 #' 
@@ -60,10 +60,10 @@ quantitative_density <- function(data_frame, noncat_vars, target_col, title_size
     p <- ggplot2::ggplot(data_frame, ggplot2::aes(x = !!ggplot2::sym(var), fill = as.factor(!!ggplot2::sym(target_col)))) +
       ggplot2::geom_density(alpha = 0.5) +
       ggplot2::scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
-      ggplot2::labs(title = paste("Diabetes Binary by", var),
+      ggplot2::labs(title = paste("target_col by", var), #Replace with actual target_col
            x = var,
            y = "Density",
-           fill = "Diabetes Binary") +
+           fill = "target_col") + # Replace with actual target_col
       ggplot2::theme_minimal() + 
       ggplot2::theme(
         axis.text = ggplot2::element_text(size = axis_size),
