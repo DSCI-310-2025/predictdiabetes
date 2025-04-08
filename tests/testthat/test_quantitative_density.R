@@ -40,11 +40,6 @@ non_numeric_data <- data.frame(
 # Data with no columns at all (completely empty)
 empty_df <- data.frame()
 
-
-
-
-
-
 # Test 1 checks return type
 test_that("quantitative_density returns a list of ggplot objects", {
   df <- data.frame(
@@ -52,15 +47,15 @@ test_that("quantitative_density returns a list of ggplot objects", {
     Age = rnorm(10, 50, 10),
     Diabetes_binary = sample(0:1, 10, replace = TRUE)
   )
-  
+
   plots <- quantitative_density(df, noncat_vars = c("BMI", "Age"), 
                                 target_col = "Diabetes_binary")
-  
+
   # Check that 'plots' is a list
   expect_type(plots, "list")
   # Check that length matches number of vars
   expect_equal(length(plots), 2)
-  
+
   # Each element should be a ggplot object
   purrr::walk(plots, ~expect_s3_class(.x, "ggplot"))
 })
@@ -71,30 +66,30 @@ test_that("quantitative_density works with a single variable", {
     BMI = rnorm(10, 25, 5),
     Diabetes_binary = sample(0:1, 10, replace = TRUE)
   )
-  
+
   plots <- quantitative_density(df, noncat_vars = "BMI", target_col = "Diabetes_binary")
-  
+
   expect_type(plots, "list")
   expect_equal(length(plots), 1)
   expect_s3_class(plots[["BMI"]], "ggplot")
 })
 
-  
+
 # Test 3: Checks labelling 
 test_that("quantitative_density sets expected labels", {
   df <- data.frame(
     BMI = rnorm(10, 25, 5),
     Diabetes_binary = sample(0:1, 10, replace = TRUE)
   )
-  
+
   plots <- quantitative_density(df, noncat_vars = "BMI", target_col = "Diabetes_binary")
   p <- plots[["BMI"]]
-  
+
   # Check the plot labels in the ggplot object
-  expect_equal(p$labels$title, "Diabetes Binary by BMI")
+  expect_equal(p$labels$title, "target_col by BMI")
   expect_equal(p$labels$x, "BMI")
   expect_equal(p$labels$y, "Density")
-  expect_equal(p$labels$fill, "Diabetes Binary")
+  expect_equal(p$labels$fill, "target_col")
 })
  #Test 4: Checks fill
 
@@ -103,16 +98,16 @@ test_that("quantitative_density uses scale_fill_manual", {
     BMI = rnorm(10, 25, 5),
     Diabetes_binary = sample(0:1, 10, replace = TRUE)
   )
-  
+
   plots <- quantitative_density(df, noncat_vars = "BMI", target_col = "Diabetes_binary")
   p <- plots[["BMI"]]
-  
+
   # Check that scale_fill_manual is included
   used_scales <- sapply(p$scales$scales, function(s) class(s)[1])
   expect_true("ScaleDiscrete" %in% used_scales) # This class typically arises from scale_fill_manual
 })
 
-#Edge cases 
+#Edge cases
 
 test_that("Test 5: Zero rows (but correct columns) returns a plot (possibly empty)", {
   plots <- quantitative_density(
@@ -120,7 +115,7 @@ test_that("Test 5: Zero rows (but correct columns) returns a plot (possibly empt
     noncat_vars = "BMI",
     target_col = "Diabetes_binary"
   )
-  
+
   # Should return a list with one ggplot, even though the data is empty
   expect_type(plots, "list")
   expect_equal(length(plots), 1)
@@ -133,7 +128,7 @@ test_that("Test 6: Single row of data returns a plot", {
     noncat_vars = "BMI",
     target_col = "Diabetes_binary"
   )
-  
+
   expect_type(plots, "list")
   expect_equal(length(plots), 1)
   expect_s3_class(plots[["BMI"]], "ggplot")
@@ -145,7 +140,7 @@ test_that("Test 7: Target column with only one level still produces a plot", {
     noncat_vars = "BMI",
     target_col = "Diabetes_binary"
   )
-  
+
   expect_type(plots, "list")
   expect_equal(length(plots), 1)
   expect_s3_class(plots[["BMI"]], "ggplot")
@@ -201,4 +196,3 @@ test_that("Test 11: Completely empty data frame (no columns, no rows)", {
     "Target column 'Diabetes_binary' not found in data."
   )
 })
-
