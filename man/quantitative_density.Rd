@@ -19,9 +19,9 @@ quantitative_density(
 
 \item{target_col}{Column of interest to plot each variable against (object).}
 
-\item{title_size}{Size of each plot's title (Default = 30).}
+\item{title_size}{Size of each plot's title (Default = 35).}
 
-\item{axis_size}{Size of each plot's axes (Default = 35).}
+\item{axis_size}{Size of each plot's axes (Default = 30).}
 }
 \value{
 A list containing \code{ggplot2} object(s) (density plots).
