@@ -1,8 +1,9 @@
 pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2025-04-08T07:14Z
+articles:
+  predictdiabetes-vignette: predictdiabetes-vignette.html
+last_built: 2025-04-09T00:14Z
 urls:
   reference: https://dsci-310-2025.github.io/predictdiabetes/reference
   article: https://dsci-310-2025.github.io/predictdiabetes/articles
