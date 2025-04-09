@@ -88,14 +88,13 @@ density_plots[["mpg"]]
 ```
 ## Display HP Plot
 
-```{r display-plot-mpg, echo=FALSE}
+```{r display-plot-hp, echo=FALSE}
 density_plots[["hp"]]
 ```
 
 
-
 ## Display WT Plot
 
-```{r display-plot-mpg, echo=FALSE}
+```{r display-plot-wt, echo=FALSE}
 density_plots[["wt"]]
 ```
