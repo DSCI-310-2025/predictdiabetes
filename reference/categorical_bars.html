@@ -52,7 +52,10 @@ color.</p>
 <span>  <span class="va">cat_vars</span>,</span>
 <span>  <span class="va">target_col</span>,</span>
 <span>  title_size <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  axis_size <span class="op">=</span> <span class="fl">35</span></span>
+<span>  axis_size <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>  legend_key_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  legend_text_size <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  legend_title_size <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -79,6 +82,18 @@ color.</p>
 <dt id="arg-axis-size">axis_size<a class="anchor" aria-label="anchor" href="#arg-axis-size"></a></dt>
 <dd><p>Size of each plot's axes (Default = 35).</p></dd>
 
+
+<dt id="arg-legend-key-size">legend_key_size<a class="anchor" aria-label="anchor" href="#arg-legend-key-size"></a></dt>
+<dd><p>Size of the legend key (Default = 1 cm).</p></dd>
+
+
+<dt id="arg-legend-text-size">legend_text_size<a class="anchor" aria-label="anchor" href="#arg-legend-text-size"></a></dt>
+<dd><p>Size of the legend text (Default = 12).</p></dd>
+
+
+<dt id="arg-legend-title-size">legend_title_size<a class="anchor" aria-label="anchor" href="#arg-legend-title-size"></a></dt>
+<dd><p>Size of the legend title (Default = 12).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -94,7 +109,10 @@ color.</p>
 <span class="r-in"><span>    cat_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    target_col <span class="op">=</span> <span class="st">"am"</span>,</span></span>
 <span class="r-in"><span>    title_size <span class="op">=</span> <span class="fl">25</span>,</span></span>
-<span class="r-in"><span>    axis_size <span class="op">=</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span>    axis_size <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>    legend_key_size <span class="op">=</span> <span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>    legend_text_size <span class="op">=</span> <span class="fl">14</span>,</span></span>
+<span class="r-in"><span>    legend_title_size <span class="op">=</span> <span class="fl">14</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="co"># Display the first bar plot</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bar_plots</span><span class="op">[[</span><span class="st">"cyl"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
