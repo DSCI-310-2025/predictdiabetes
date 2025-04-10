@@ -36,34 +36,68 @@
 
 <div id="contributions" class="section level1">
 
-<p>We welcome all contributions to this project! If you notice a bug, or have a feature request, please open up an issue <a href="https://github.com/DSCI-310-2025/dsci-310-group-06/issues" class="external-link">here</a>. If you’d like to contribute a feature or bug fix, you can fork our repo and submit a pull request. We will review pull requests within 7 days. All contributors must abide by our <a href="CODE_OF_CONDUCT.html">code of conduct</a>.</p>
+<p>We welcome all contributions to this project! If you notice a bug, or have a feature request, please open up an issue <a href="https://github.com/DSCI-310-2025/dsci-310-group-06/issues" class="external-link">here</a>. If you’d like to contribute a feature or bug fix, you can fork or clone our repo and submit a pull request. For more in-depth instructions, see below. We will review pull requests within 7 days. All contributors must abide by our <a href="CODE_OF_CONDUCT.html">code of conduct</a>.</p>
 <div class="section level2">
-<h2 id="issue-requests">Issue requests<a class="anchor" aria-label="anchor" href="#issue-requests"></a></h2>
-<ol style="list-style-type: decimal"><li>Go to the “Issues” tab in GitHub.</li>
+<h2 id="how-to-contribute">How to Contribute<a class="anchor" aria-label="anchor" href="#how-to-contribute"></a></h2>
+<ol style="list-style-type: decimal"><li>Clone the repository from a terminal</li>
+</ol><div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/DSCI-310-2025/predictdiabetes.git</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal"><li>Change the working directory to the project folder</li>
+</ol><div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="bu">cd</span> predictdiabetes</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal"><li>Create a new branch and switch to it</li>
+</ol><div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>-<span class="op">&lt;</span>task_description<span class="op">&gt;</span>-<span class="op">&lt;</span>step_num<span class="op">&gt;</span></span></code></pre></div>
+<blockquote>
+<p>IMPORTANT: Branches must follow the format <code>&lt;username&gt;-&lt;task_description&gt;-&lt;step_num&gt;</code> and be derived from either <code>main</code> or from an existing branch should you with to edit from there.</p>
+</blockquote>
+<blockquote>
+<p>Example of a good branch name: <code>jane_doe-create-bar-plot-function-m3</code></p>
+</blockquote>
+<ol start="4" style="list-style-type: decimal"><li>Make your changes
+<ul><li>Remember to regularly pull changes from the origin <code>main</code> branch to your local <code>main</code> branch.</li>
+<li>If you’re fixing a bug or adding a feature, be sure to:</li>
+</ul></li>
+</ol><blockquote>
+<p>Ensure that your changes do not break any existing functionality</p>
+</blockquote>
+<blockquote>
+<p>Follow the existing coding style and guidelines of the project.</p>
+</blockquote>
+<blockquote>
+<p>If applicable, add tests to ensure the functionality works as expected.</p>
+</blockquote>
+<blockquote>
+<p>Update documentation, if necessary (<code>README.md</code>, etc.).</p>
+</blockquote>
+<ol start="5" style="list-style-type: decimal"><li>Commit your changes
+<ul><li>Once your changes are complete, commit them with a descriptive message</li>
+</ul></li>
+<li>Push your changes</li>
+</ol><div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">git</span> push origin <span class="op">&lt;</span>branch-name<span class="op">&gt;</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="pull-requests">Pull Requests<a class="anchor" aria-label="anchor" href="#pull-requests"></a></h2>
+<ol style="list-style-type: decimal"><li>After pushing your changes, go to the project page on GitHub and create the pull request.
+<ul><li>Add more information to the extended decription if necessary.</li>
+<li>Resolve any merge conflicts that pop up with Merge Editor on VSCode; do not recklessly combine both versions of the file together.</li>
+<li>Warning: <code>.ipynb</code> files will not work with Merge Editor on VSCode; please outline them on Google Docs first before committing.</li>
+</ul></li>
+<li>Once your pull request is open, the project maintainers will review it. They may suggest changes or improvements. Be open to feedback and be ready to make additional commits if necessary.</li>
+<li>Once your pull request is reviewed, feel free to merge the commit to main. Thank you for your contribution!</li>
+</ol></div>
+<div class="section level2">
+<h2 id="reporting-issues-and-seeking-support">Reporting Issues and Seeking Support<a class="anchor" aria-label="anchor" href="#reporting-issues-and-seeking-support"></a></h2>
+<ul><li>For further information on seeking support, please see the <a href="CODE_OF_CONDUCT.html">code of conduct</a>.</li>
+</ul><ol style="list-style-type: decimal"><li>Go to the “Issues” tab in GitHub.</li>
 <li>Click “New issue”.</li>
 <li>Provide a reasonably descriptive title and elaborate in the description.</li>
 <li>If necessary, provide additional sub-issues and corresponding details as concrete steps to complete.</li>
 <li>Once the issue/sub-issue is completed, remember to close it.</li>
 </ol></div>
 <div class="section level2">
-<h2 id="pull-requests">Pull requests<a class="anchor" aria-label="anchor" href="#pull-requests"></a></h2>
-<ol style="list-style-type: decimal"><li>Regularly pull changes from the origin <code>main</code> branch to your local <code>main</code> branch.</li>
-<li>Create a new branch for every step of changes you want to make named in the form <code>&lt;user&gt;-&lt;task_description&gt;-&lt;step_num&gt;</code>, derived from either <code>main</code> or from an existing branch should you with to edit from there.</li>
-<li>For each commit, provide a succint descriptor of what changes are to be applied, and push to the corresponding origin branch.</li>
-<li>Create the pull request.
-<ul><li>Resolve any merge conflicts that pop up with Merge Editor on VSCode; do not recklessly combine both versions of the file together.</li>
-<li>Warning: <code>.ipynb</code> files will not work with Merge Editor on VSCode; please outline them on Google Docs first before committing.</li>
-</ul></li>
-<li>Apply merge commit; add more to the extended decription if necessary.</li>
-</ol></div>
-<div class="section level2">
-<h2 id="external-documentation">External documentation<a class="anchor" aria-label="anchor" href="#external-documentation"></a></h2>
+<h2 id="external-documentation">External Documentation<a class="anchor" aria-label="anchor" href="#external-documentation"></a></h2>
 <ul><li><a href="README.html">README.md</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of Conduct</a></li>
 <li><a href="LICENSE-MIT.html">MIT License</a></li>
 <li><a href="LICENSE-CC.html">Creative Commons License</a></li>
-<li><a href="reports/diabetes_classification_report.ipynb">Diabetes Classification Report</a></li>
-<li><a href="src/dataset_download.py">Dataset Download Python Code</a></li>
 </ul></div>
 </div>
 
