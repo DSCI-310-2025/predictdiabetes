@@ -89,22 +89,45 @@ to provide plots for every provided categorical variable.
 
 ``` r
 # Generate bar plots for categorical variables from the mtcars dataset
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+mtcars$am   <- as.factor(mtcars$am)
+
 bar_plots <- categorical_bars(
   data_frame = mtcars,
   cat_vars = c("cyl", "gear"),
   target_col = "am",
-  title_size = 25,
+  title_size = 15,
   axis_size = 20
 )
-# Display the first bar plot 
-plot(bar_plots[["cyl"]])
+
+## Display one of the bar plots, e.g., for cyl:
+(bar_plots[["cyl"]])
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-categorical_bars-1.png" width="100%" />
 
 After building the LASSO model, ROC plots would be beneficial to
 evaluate how your model would perform.
 
-    #> Saving 7 x 5 in image
+``` r
+set.seed(42)
+
+test_data <- data.frame(
+  Diabetes_binary = factor(sample(c(0, 1), 100, replace = TRUE)),
+  .pred_1 = runif(100)
+)
+
+output_plot <- roc_plot(
+  test_data,
+  "Diabetes_binary",
+  ".pred_1",
+  0.85,
+  tempfile(fileext = ".png")  # This doesn't create an actual file
+)
+#> Saving 7 x 7 in image
+
+plot(output_plot)
+```
 
 <img src="man/figures/README-output_plot-1.png" width="100%" />
