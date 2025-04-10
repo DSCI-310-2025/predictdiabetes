@@ -2,8 +2,10 @@ Package: predictdiabetes
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("dkln", "klht", email = "dkln.klht@group6.com", role = c("aut", "cre"))
+Author: dkln klht <dkln.klht@group6.com>
+Maintainer: dkln klht <dkln.klht@group6.com>
+Description: Function used for group 6 R analysis. These include visualizations, helping create pip for workflow for logistic regression model.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -31,5 +33,6 @@ Imports:
     vcd,
     workflows,
     yardstick,
-    glmnet
+    broom,
+    FSelectorRcpp
 VignetteBuilder: knitr
