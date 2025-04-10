@@ -64,9 +64,10 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example usage:</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Assuming you have a confusion matrix object from yardstick::conf_mat</span></span></span>
 <span class="r-in"><span><span class="fu">cm_plot</span><span class="op">(</span><span class="va">cm</span>, <span class="st">"confusion_matrix_plot.png"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cm_plot(cm, "confusion_matrix_plot.png"):</span> columns in conf_matrix_df must contain 'Prediction', 'Truth', and 'Freq'</span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -75,7 +76,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by First Last.</p>
+  <p>Developed by dkln klht.</p>
 </div>
 
 <div class="pkgdown-footer-right">
