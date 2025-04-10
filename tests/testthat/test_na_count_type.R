@@ -44,69 +44,69 @@ case_5 <- data.frame(
 )
 
 # Expected case
-test_that("Checks the behavior of the `na_count_type` function when the data 
+test_that("Checks the behavior of the `na_count_type` function when the data
           frame contains columns of a single data type (double)", {
   result <- na_count_type(case_0)
   expect_equal(as.numeric(result["NA_Count",]), c(1, 1))
   expect_equal(as.numeric(result["Distinct_Count",]), c(4, 4))
   expect_equal(as.vector(result["Current_Data_Type",]), c("double", "double"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
 # Edge cases
-test_that("Verifies that the `na_count_type` function handles columns of 
+test_that("Verifies that the `na_count_type` function handles columns of
           multiple data types (double, character, logical, and integer)", {
   result <- na_count_type(case_1)
   expect_equal(as.numeric(result["NA_Count",]), c(1, 1, 1, 2))
   expect_equal(as.numeric(result["Distinct_Count",]), c(5, 4, 3, 3))
   expect_equal(as.vector(result["Current_Data_Type",]), c("double", "character", "logical", "integer"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
-test_that("Checks that `stringsAsFactors = TRUE` does not affect the behavior 
+test_that("Checks that `stringsAsFactors = TRUE` does not affect the behavior
           of the function for mixed types in the data frame", {
   result <- na_count_type(case_2)
   expect_equal(as.numeric(result["NA_Count",]), c(1, 1, 1, 2))
   expect_equal(as.numeric(result["Distinct_Count",]), c(5, 4, 3, 3))
   expect_equal(as.vector(result["Current_Data_Type",]), c("double", "integer", "logical", "integer"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
-test_that("Checks how the function handles columns containing only NA and NaN 
+test_that("Checks how the function handles columns containing only NA and NaN
           values", {
   result <- na_count_type(case_3)
   expect_equal(as.numeric(result["NA_Count",]), c(5, 5))
   expect_equal(as.numeric(result["Distinct_Count",]), c(1, 1))
   expect_equal(as.vector(result["Current_Data_Type",]), c("logical", "double"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
-test_that("Checks that list columns are treated correctly and that each list 
+test_that("Checks that list columns are treated correctly and that each list
           item becomes its own column", {
   result <- na_count_type(case_4)
   expect_equal(as.numeric(result["NA_Count",]), c(0, 0, 0, 0))
   expect_equal(as.numeric(result["Distinct_Count",]), c(1, 1, 1, 1))
   expect_equal(as.vector(result["Current_Data_Type",]), c("character", "character", "logical", "double"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
-test_that("Checks how the function handles columns that contain mixed data types 
+test_that("Checks how the function handles columns that contain mixed data types
           (e.g., character, numeric, logical, and NA values)", {
   result <- na_count_type(case_5)
   expect_equal(as.numeric(result["NA_Count",]), c(1, 2, 2, 2))
   expect_equal(as.numeric(result["Distinct_Count",]), c(6, 5, 5, 4))
   expect_equal(as.vector(result["Current_Data_Type",]), c("character", "double", "double", "double"))
-  expect_is(result, "matrix")
+  expect_true(is.matrix(result))
   expect_type(result, "character")
 })
 
 # Error case
 test_that("Empty data frame should return error", {
   invalid_df <- c(1, 2, 3)
-  expect_error(na_count_type(invalid_df)) 
+  expect_error(na_count_type(invalid_df))
 })
