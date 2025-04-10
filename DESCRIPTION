@@ -34,5 +34,6 @@ Imports:
     workflows,
     yardstick,
     broom,
-    FSelectorRcpp
+    FSelectorRcpp,
+    glmnet
 VignetteBuilder: knitr
