@@ -1,6 +1,7 @@
 #' Creates and saves an ROC curve plot
 #'
-#' This function creates an ROC curve plot and saves it to the specified file path.
+#' This function creates an ROC curve plot for a given classification model and
+#' saves it to the specified file path.
 #'
 #' @param model_outputs A data frame or tibble containing the model outputs.
 #' @param true_class A character string specifying the column with actual class labels.
@@ -8,7 +9,7 @@
 #' @param roc_auc_value A numeric value representing the AUC from model evaluation.
 #' @param output_path A character string specifying the file path to save the ROC plot.
 #'
-#' @return A ggplot2 object of the ROC curve.
+#' @return A `ggplot2` object of the ROC curve.
 #'
 #' @export
 #'
@@ -19,7 +20,7 @@
 #'          lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"],
 #'          "roc_curve_plot.png")
 #' }
-#'
+
 roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, output_path) {
 
   # Check for missing or empty inputs
@@ -50,7 +51,7 @@ roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, 
   }
 
   # solve interactive issue
-  if(!interactive()) pdf(NULL)
+  if(!interactive()) grDevices::pdf(NULL)
 
   # Create the ROC plot
   roc_curve_data <- yardstick::roc_curve(
@@ -61,7 +62,8 @@ roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, 
   )
 
   output_plot <- ggplot2::ggplot(roc_curve_data,
-                                 ggplot2::aes(x = 1 - specificity, y = sensitivity)) +
+                                 ggplot2::aes(x = 1 - specificity,
+                                              y = sensitivity)) +
     ggplot2::geom_path() +
     ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
     ggplot2::geom_text(

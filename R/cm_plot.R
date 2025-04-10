@@ -16,6 +16,7 @@
 #' cm_plot(cm, "confusion_matrix_plot.png")
 #' }
 #'
+
 cm_plot <- function(conf_matrix_df, output_path) {
 
   # Check if required columns are present
@@ -30,7 +31,7 @@ cm_plot <- function(conf_matrix_df, output_path) {
     stop("could not create file")
   }
 
-  if(!interactive()) pdf(NULL)
+  if(!interactive()) grDevices::pdf(NULL)
 
   output_plot <- ggplot2::ggplot(
     conf_matrix_df,
