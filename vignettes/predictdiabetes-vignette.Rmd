@@ -14,11 +14,24 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r}
+install.packages("devtools")
+devtools::document()   # to update your NAMESPACE
+devtools::install()    # to install your package locally
+
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+install.packages("vcd")
 library(ggplot2)
 library(tools)
+library(dplyr)
+library(tibble)
+library(purrr)
+library(vcd)
+library(ggplot2)
+
 ```
 
 ## Function Definition
@@ -148,7 +161,11 @@ categorical_bars <- function(data_frame, cat_vars, target_col, title_size = 30, 
   return(bar_plots)
 }
 
+
+
 ```
+
+
 
 ```{r}
 ## Generate Bar Plots Using mtcars
@@ -169,3 +186,62 @@ bar_plots <- categorical_bars(
 print(bar_plots[["cyl"]])
 ```
 
+
+
+
+## Function Definition
+```{r}
+cramer_chi_results <- function(df, categorical_vars, target_col) {
+  if (nrow(df) == 0) {
+    stop("Insufficient data: the dataframe is empty.")
+  }
+  
+  if (!is.character(categorical_vars)) {
+    stop("categorical_vars must be a character vector of column names.")
+  }
+  
+  missing_vars <- setdiff(categorical_vars, colnames(df))
+  if (length(missing_vars) > 0) {
+    stop(paste("The following variables are not present in the dataframe:", paste(missing_vars, collapse = ", ")))
+  }
+  
+  cramer_chi_results <- purrr::map_dfr(categorical_vars, function(var) {
+    tbl <- table(df[[var]], df[[target_col]])
+    test_result <- stats::chisq.test(tbl)
+    cv <- vcd::assocstats(tbl)$cramer
+    tibble::tibble(
+      Variable = var,
+      Statistic = test_result$statistic,
+      DF = test_result$parameter,
+      p_value = test_result$p.value,
+      Expected_Min = min(test_result$expected),
+      Expected_Max = max(test_result$expected),
+      CramersV = cv
+    )
+  })
+  
+  return(dplyr::arrange(cramer_chi_results, dplyr::desc(CramersV)))
+}
+```
+
+```{r}
+# Convert existing variables to factors.
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+
+# Create a binary categorical variable from 'mpg':
+# 'High' if mpg is at or above the median, and 'Low' otherwise.
+mtcars$mpg_cat <- ifelse(mtcars$mpg >= median(mtcars$mpg), "High", "Low")
+mtcars$mpg_cat <- as.factor(mtcars$mpg_cat)
+```
+
+```{r}
+chi_results <- cramer_chi_results(
+  df = mtcars, 
+  categorical_vars = c("cyl", "gear"), 
+  target_col = "mpg_cat"
+)
+
+# Display the resulting summary table.
+chi_results
+```
