@@ -1,6 +1,3 @@
-library(testthat)
-source("~/work/R/roc_plot.R")
-
 # ------------------------------------------------------------------------------
 # Sample data for testing
 set.seed(42)
@@ -18,10 +15,10 @@ model_outputs_extreme <- data.frame(
 # Test 1: Check if roc_plot returns a valid ggplot object
 test_that("roc_plot returns a ggplot object", {
   output_plot <- roc_plot(
-    test_data, 
-    "Diabetes_binary", 
-    ".pred_1", 
-    0.85, 
+    test_data,
+    "Diabetes_binary",
+    ".pred_1",
+    0.85,
     tempfile(fileext = ".png")  # This doesn't create an actual file
   )
   expect_s3_class(output_plot, "gg")
@@ -29,10 +26,10 @@ test_that("roc_plot returns a ggplot object", {
 
 test_that("roc_plot returns a ggplot2 object", {
   output_plot <- roc_plot(
-    test_data, 
-    "Diabetes_binary", 
-    ".pred_1", 
-    0.85, 
+    test_data,
+    "Diabetes_binary",
+    ".pred_1",
+    0.85,
     tempfile(fileext = ".png")
   )
   expect_s3_class(output_plot, "ggplot")

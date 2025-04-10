@@ -1,6 +1,3 @@
-library(testthat)
-source("~/work/R/cm_plot.R")
-
 # expected cases ----------------------------------------------------------------
 
 test_that("cm_plot has the correct layers", {

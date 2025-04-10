@@ -1,6 +1,3 @@
-library(testthat)
-source("~/work/R/category_target.R")
-
 # Sample data frame with various categorical and mixed-type variables
 case_1 <- data.frame(
   a = c(1, 2, 3, 4, 5),  # Numeric variable with unique values

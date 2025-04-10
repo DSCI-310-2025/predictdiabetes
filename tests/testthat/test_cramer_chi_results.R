@@ -1,6 +1,3 @@
-library(testthat)
-source("~/work/R/cramer_chi_results.R")
-
 set.seed(100)
 df <- tibble::tibble(
   Category1 = sample(c("A", "B", "C", "D"), 100, replace = TRUE),
@@ -59,7 +56,7 @@ test_that("cramer_chi_results calculates valid Chi-square statistics", {
 test_that("cramer_chi_results calculates valid degrees of freedom", {
   categorical_vars <- c("Category1", "Category2")
   result <- cramer_chi_results(df, categorical_vars, "Target")
-  
+
   # Check if degrees of freedom are positive
   testthat::expect_true(all(result$DF > 0))
 })

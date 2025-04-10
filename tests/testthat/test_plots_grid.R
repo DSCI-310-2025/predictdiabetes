@@ -1,7 +1,3 @@
-library(testthat)
-source("~/work/R/plots_grid.R")
-
-
 # expected cases ---------------------------------------------------------------
 test_that("plots_grid combines bar and density plots correctly", {
   # Create dummy ggplot objects for bar and density plots
