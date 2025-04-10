@@ -1,5 +1,5 @@
 library(testthat)
-source("~/work/R/lr_pipeline.R")
+# source("~/work/R/lr_pipeline.R")
 
 # Sample testing data frames
 df <- data.frame(

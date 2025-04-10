@@ -96,7 +96,7 @@ bar_plots <- categorical_bars(
   title_size = 25,
   axis_size = 20
 )
-# Display the first bar plot
+# Display the first bar plot 
 plot(bar_plots[["cyl"]])
 ```
 

@@ -1,5 +1,5 @@
 library(testthat)
-source("~/work/R/info_gain_results.R")
+# source("~/work/R/info_gain_results.R")
 
 # Create a simple test dataset
 test_data <- tibble::tibble(

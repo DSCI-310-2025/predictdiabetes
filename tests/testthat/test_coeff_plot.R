@@ -1,6 +1,6 @@
 library(testthat)
 library(tidymodels)
-source("~/work/R/coeff_plot.R")
+# source("~/work/R/coeff_plot.R")
 
 # Creating a minimal LASSO workflow for testing
 make_lasso_workflow <- function() {

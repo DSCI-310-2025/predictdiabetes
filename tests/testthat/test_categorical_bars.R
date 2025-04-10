@@ -1,5 +1,5 @@
 library(testthat)
-source("~/work/R/categorical_bars.R")
+# source("~/work/R/categorical_bars.R")
 
 # Sample testing data frame
 test_df <- data.frame(
