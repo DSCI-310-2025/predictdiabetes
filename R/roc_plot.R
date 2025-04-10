@@ -11,12 +11,15 @@
 #' @return A ggplot2 object of the ROC curve.
 #'
 #' @export
-#' 
+#'
 #' @examples
-#' # Example usage:
+#' \dontrun{
 #' # Assuming you have model outputs, true labels, predicted probabilities, and AUC value
-#' roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
-#' 
+#' roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1",
+#'          lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"],
+#'          "roc_curve_plot.png")
+#' }
+#'
 roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, output_path) {
 
   # Check for missing or empty inputs
@@ -51,21 +54,21 @@ roc_plot <- function(model_outputs, true_class, predicted_probs, roc_auc_value, 
 
   # Create the ROC plot
   roc_curve_data <- yardstick::roc_curve(
-    model_outputs, 
-    !!rlang::sym(true_class), 
-    !!rlang::sym(predicted_probs), 
+    model_outputs,
+    !!rlang::sym(true_class),
+    !!rlang::sym(predicted_probs),
     event_level = "second"
   )
 
-  output_plot <- ggplot2::ggplot(roc_curve_data, 
+  output_plot <- ggplot2::ggplot(roc_curve_data,
                                  ggplot2::aes(x = 1 - specificity, y = sensitivity)) +
     ggplot2::geom_path() +
     ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
     ggplot2::geom_text(
-      x = 0.7, 
-      y = 0.2, 
+      x = 0.7,
+      y = 0.2,
       label = paste("AUC =", base::round(roc_auc_value, 3)),
-      size = 5, 
+      size = 5,
       color = "blue"
     ) +
     ggplot2::labs(

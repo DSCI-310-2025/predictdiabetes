@@ -1,6 +1,6 @@
 #' Logistic Regression Binary Classification Pipeline
-#' 
-#' Trains and fits a logistic regression model and cross-validates for optimal 
+#'
+#' Trains and fits a logistic regression model and cross-validates for optimal
 #' hyperparameter values.
 #'
 #' @param data A data frame or data frame extension (e.g. a tibble).
@@ -9,16 +9,17 @@
 #' @param grid_size A number specifying penalty values to test during model tuning (Default = 10).
 #' @param tuning_metric A string specifying the metric used to select for the most optimal model (e.g. "recall").
 #' @param output_path String path location to save the model as an RDS object.
-#' 
+#'
 #' @return An RDS file containing the workflow object
 #'
 #' @export
-#' 
+#'
 #' @examples
 #' \dontrun{
-#'   lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
+#'   lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall",
+#'   output_path = "lasso_tuned_wflow.RDS")
 #' }
-#' 
+#'
 lr_pipeline <- function(data, target_col, vfolds = 5, grid_size = 10, tuning_metric, output_path) {
   lr_mod <- parsnip::logistic_reg(penalty = tune(), mixture = 1) %>%
     parsnip::set_engine("glmnet") %>%
