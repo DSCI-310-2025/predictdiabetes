@@ -1,13 +1,9 @@
-library(testthat)
-# source("~/work/R/plots_grid.R")
-
-
 # expected cases ---------------------------------------------------------------
-test_that("plots_grid combines bar and density plots correctly", {
-  # Create dummy ggplot objects for bar and density plots
+test_that("plots_grid combines bar plots correctly", {
+  # Create a dummy ggplot object for bar plots
   bar_plots <- list(ggplot2::ggplot(mtcars, ggplot2::aes(x = mpg)) + ggplot2::geom_bar())
 
-  # Call the function with these plot lists
+  # Call the function with bar plot list
   result <- plots_grid(bar_plots, num_cols = 2)
 
   # Check if the result is a ggplot object (the return type from patchwork is ggplot)
@@ -19,7 +15,7 @@ test_that("plots_grid combines bar and density plots correctly", {
 test_that("plots_grid handles empty plot lists", {
   bar_plots <- list()
 
-  # Call the function with empty plot lists
+  # Call the function with an empty plot list
   result <- plots_grid(bar_plots, num_cols = 2)
 
   # Check that the result is still a ggplot object, but effectively empty
@@ -37,7 +33,6 @@ test_that("plots_grid handles large num_cols gracefully", {
   # Check that the result is a ggplot object
   expect_s3_class(result, "gg")
 })
-
 
 # error cases ------------------------------------------------------------------
 

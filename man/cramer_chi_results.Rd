@@ -7,11 +7,11 @@
 cramer_chi_results(df, categorical_vars, target_col)
 }
 \arguments{
+\item{df}{A data frame or data frame extension (e.g. a tibble).}
+
+\item{categorical_vars}{A vector containing the string name(s) of each \strong{categorical} variable in the data frame.}
+
 \item{target_col}{A string specifying the categorical variable against which chi-squared tests will be performed.}
-
-\item{data_frame}{A data frame or data frame extension (e.g. a tibble).}
-
-\item{cat_vars}{A vector containing the string name(s) of each \strong{categorical} variable in the data frame.}
 }
 \value{
 Data frame with 1 row per variable and 7 columns:

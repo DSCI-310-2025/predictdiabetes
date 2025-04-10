@@ -24,14 +24,17 @@ roc_plot(
 \item{output_path}{A character string specifying the file path to save the ROC plot.}
 }
 \value{
-A ggplot2 object of the ROC curve.
+A \code{ggplot2} object of the ROC curve.
 }
 \description{
-This function creates an ROC curve plot and saves it to the specified file path.
+This function creates an ROC curve plot for a given classification model and
+saves it to the specified file path.
 }
 \examples{
-# Example usage:
+\dontrun{
 # Assuming you have model outputs, true labels, predicted probabilities, and AUC value
-roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1", lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"], "roc_curve_plot.png")
-
+roc_plot(lasso_model_outputs, "Diabetes_binary", ".pred_1",
+         lasso_metrics$.estimate[lasso_metrics$.metric == "roc_auc"],
+         "roc_curve_plot.png")
+}
 }

@@ -1,5 +1,3 @@
-library(testthat)
-# source("~/work/R/na_count_type.R")
 
 # Samples data frames
 case_0 <- data.frame(

@@ -35,7 +35,8 @@ hyperparameter values.
 }
 \examples{
 \dontrun{
-  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
+  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall",
+  output_path = "lasso_tuned_wflow.RDS")
 }
 
 }

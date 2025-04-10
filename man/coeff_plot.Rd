@@ -10,12 +10,12 @@ coeff_plot(model)
 \item{model}{A workflow object containing a trained LASSO model.}
 }
 \value{
-A \code{ggplot} object with the bar plot of LASSO model coefficients.
+A \code{ggplot} object that visualizes the LASSO model coefficients as a bar plot.
 }
 \description{
 This function extracts the coefficients from a fitted LASSO classification
-workflow object, arranges them by importance, and creates a bar plot to
-visualize the coefficients.
+model contained within a workflow object, arranges them by importance, and
+creates a bar plot to visualize the coefficients.
 }
 \examples{
 # Assuming you have a trained workflow named 'lasso_model'
