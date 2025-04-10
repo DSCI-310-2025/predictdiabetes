@@ -12,7 +12,7 @@
 #' 
 #' @return An RDS file containing the workflow object
 #'
-#' @importFrom dplyr %>% filter mutate
+#' @importFrom dplyr %>%
 #' @importFrom stats reformulate
 #' @export
 #' 
@@ -56,6 +56,9 @@ lr_pipeline <- function(data, target_col, vfolds = 5, grid_size = 10, tuning_met
 
   final_model <- tune::finalize_workflow(lr_workflow %>% workflows::add_model(lr_mod), best_params) %>%
     parsnip::fit(data = data)
+
+  # Save the final model to the output path
+  saveRDS(final_model, output_path)
 
   return(final_model)
 }

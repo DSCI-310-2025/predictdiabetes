@@ -19,7 +19,6 @@ This function creates a confusion matrix plot and saves it to the specified file
 }
 \examples{
 \dontrun{
-# Example usage:
 # Assuming you have a confusion matrix object from yardstick::conf_mat
 cm_plot(cm, "confusion_matrix_plot.png")
 }

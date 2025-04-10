@@ -16,7 +16,6 @@
 #'    - Expected_Max: Maximum expected value.
 #'    - CramersV: Cramer's V statistic.
 #'    
-#' @importFrom rlang .data
 #' @export
 #' 
 #' @examples
@@ -38,6 +37,9 @@ cramer_chi_results <- function(df, categorical_vars, target_col) {
     stop(paste("The following variables are not present in the dataframe:", paste(missing_vars, collapse = ", ")))
   }
 
+  # Bind global variables
+  CramersV <- NULL
+
   cramer_chi_results <- purrr::map_dfr(categorical_vars, function(var) {
     tbl <- table(df[[var]], df[[target_col]])
     test_result <- stats::chisq.test(tbl)
@@ -53,5 +55,5 @@ cramer_chi_results <- function(df, categorical_vars, target_col) {
     )
   })
 
-  return(dplyr::arrange(cramer_chi_results, dplyr::desc(.data$CramersV)))
+  return(dplyr::arrange(cramer_chi_results, dplyr::desc(CramersV)))
 }

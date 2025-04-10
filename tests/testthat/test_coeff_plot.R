@@ -14,7 +14,7 @@ make_lasso_workflow <- function() {
     workflows::add_model(lasso_spec) %>%
     workflows::fit(data = mtcars)
   
-  return(wf)
+  return(suppressWarnings(wf))
 }
 
 # Expected cases

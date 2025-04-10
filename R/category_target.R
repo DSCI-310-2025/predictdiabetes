@@ -11,7 +11,7 @@
 #'    - Count: Number of occurrances of each category in cat_var.
 #'    - Proportion: Proportion of each category relative to the total number of rows in the data frame.
 #' 
-#' @importFrom dplyr %>% filter mutate
+#' @importFrom dplyr %>%
 #' @export
 #' 
 #' @examples

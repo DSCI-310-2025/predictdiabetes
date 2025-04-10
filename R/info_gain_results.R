@@ -8,8 +8,7 @@
 #'
 #' @return A tibble with two columns: `Variable` and `Information_Gain`, sorted in descending order.
 #' 
-#' @importFrom dplyr %>% filter mutate
-#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @export
 #' 
 #' @examples
@@ -23,11 +22,14 @@ info_gain <- function(data, formula) {
     stop("Input data cannot be empty")
   }
   
+  # Bind global variables
+  importance <- attributes <- NULL
+
   ig <- FSelectorRcpp::information_gain(formula, data = data)
   
   info_sorted <- ig %>%
-    dplyr::arrange(dplyr::desc(.data$importance)) %>%
-    dplyr::rename(Variable = .data$attributes, Information_Gain = .data$importance)
+    dplyr::arrange(dplyr::desc(importance)) %>%
+    dplyr::rename(Variable = attributes, Information_Gain = importance)
   
   return(info_sorted)
 }

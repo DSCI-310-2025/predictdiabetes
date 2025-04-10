@@ -1,4 +1,4 @@
-# Sample testing data frames
+# Sample data frames for testing
 df <- data.frame(
   Diabetes_binary = factor(sample(0:1, 100, replace = TRUE)),
   v1 = rnorm(100),
@@ -10,15 +10,16 @@ df_small <- data.frame(
   v1 = rnorm(5) 
 )
 
+# Sample regression models for testing
+output_path <- tempfile(fileext = ".rds")
+model <- lr_pipeline(df, "Diabetes_binary", 5, 10, "recall", output_path)
+
 # Expected cases
 test_that("lr_pipeline function should return a valid workflow object", {
-  output_path <- tempfile(fileext = ".rds")
-  model <- lr_pipeline(df, "Diabetes_binary", 5, 10, "recall", output_path)
   expect_s3_class(model, "workflow")
 })
 
 test_that("Pipeline model is trained and contains a fitted model", {
-  model <- lr_pipeline(df, "Diabetes_binary", 5, 10, "recall", output_path)
   fitted_model <- workflows::extract_fit_parsnip(model)
 
   best_lambda <- fitted_model$spec$args$penalty
@@ -41,20 +42,12 @@ test_that("Dataframe input into pipeline function should have more than 1 row", 
 
 # Error cases
 test_that("lr_pipeline function should run without errors", {
-  output_path <- tempfile(fileext = ".rds")
-
-  expect_error(
-    lr_pipeline(df, "Diabetes_binary", 5, 10, "recall", output_path),
-    NA
-  )
+  expect_error(model, NA)
 })
 
 test_that("Pipeline object is not empty", {
-  output_path <- tempfile(fileext = ".rds")
-  pipeline_object <- lr_pipeline(df, "Diabetes_binary", 5, 10, "recall", output_path)
-
-  expect_false(is.null(pipeline_object))
-  expect_true(length(pipeline_object) > 0)
+  expect_false(is.null(model))
+  expect_true(length(model) > 0)
 })
 
 test_that("Pipeline returns error if there are more folds than samples", {

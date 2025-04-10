@@ -7,12 +7,11 @@
 #'
 #' @return A ggplot2 object displaying a tile heatmap of the confusion matrix.
 #' 
-#' @importFrom rlang .data
+#' @importFrom grDevices pdf
 #' @export
 #' 
 #' @examples
 #' \dontrun{
-#' # Example usage:
 #' # Assuming you have a confusion matrix object from yardstick::conf_mat
 #' cm_plot(cm, "confusion_matrix_plot.png")
 #' }
@@ -31,17 +30,22 @@ cm_plot <- function(conf_matrix_df, output_path) {
     stop("could not create file")
   }
 
+  if(!interactive()) pdf(NULL)
+
+  # Bind global variables
+  Prediction <- Truth <- Freq <- NULL
+
   output_plot <- ggplot2::ggplot(
     conf_matrix_df,
     ggplot2::aes(
-      x = .data$Prediction,
-      y = .data$Truth,
-      fill = .data$Freq
+      x = Prediction,
+      y = Truth,
+      fill = Freq
     )
   ) +
     ggplot2::geom_tile() +
     ggplot2::geom_text(
-      ggplot2::aes(label = .data$Freq),
+      ggplot2::aes(label = Freq),
       size = 5,
       color = "black"
     ) +

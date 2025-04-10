@@ -26,9 +26,7 @@ test_that("cm_plot creates a PNG file", {
   unlink(temp_png_path)
 })
 
-
 # edge cases --------------------------------------------------------------------
-
 test_that("cm_plot handles single prediction and truth class", {
   single_class_df <- data.frame(Prediction = c("Positive"), Truth = c("Positive"), Freq = c(100))
   plot <- cm_plot(single_class_df, tempfile(fileext = ".png"))
@@ -64,7 +62,6 @@ test_that("cm_plot handles empty data frame gracefully", {
 })
 
 # error cases -------------------------------------------------------------------
-
 test_that("cm_plot raises error when required columns are missing", {
   missing_column_df <- data.frame(
     ClassPredicted = c("Positive", "Negative"),

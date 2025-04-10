@@ -8,8 +8,7 @@
 #' 
 #' @return A `ggplot` object with the bar plot of LASSO model coefficients.
 #' 
-#' @importFrom dplyr %>% filter mutate
-#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @export
 #' 
 #' @examples
@@ -32,15 +31,18 @@ coeff_plot <- function(model) {
     stop("The workflow must contain a fitted LASSO model (class 'glmnet').")
   }
   
+  # Bind global variables
+  estimate <- term <- NULL
+
   # Extract coefficients using workflows and broom
   lasso_coefs <- model %>%
     workflows::extract_fit_parsnip() %>%
     broom::tidy()
   
   lasso_coefs_summarized <- lasso_coefs %>%
-    dplyr::arrange(dplyr::desc(.data$estimate))
+    dplyr::arrange(dplyr::desc(estimate))
 
-  cf_plot <- ggplot2::ggplot(lasso_coefs_summarized, ggplot2::aes(x = stats::reorder(.data$term, .data$estimate), y = .data$estimate)) +
+  cf_plot <- ggplot2::ggplot(lasso_coefs_summarized, ggplot2::aes(x = stats::reorder(term, estimate), y = estimate)) +
           ggplot2::geom_bar(stat = "identity", fill = "#1f77b4") +
           ggplot2::coord_flip() +
           ggplot2::labs(x = "Feature", y = "Coefficient") +
