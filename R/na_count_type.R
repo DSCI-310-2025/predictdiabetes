@@ -1,8 +1,7 @@
 #' Summarise Data Frame Columns
 #' 
 #' Given an input data frame, this function checks for the number of missing values
-#' (NA), the number of distinct values, and the data type of each variable. `NULL`
-#' values will be treated as a column of `NA`
+#' (NA), the number of distinct values, and the data type of each variable.
 #'
 #' @param data_frame A data frame or data frame extension (e.g. a tibble).
 #'

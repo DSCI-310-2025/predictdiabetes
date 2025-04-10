@@ -19,8 +19,7 @@ Data frame with 1 row per variable and 3 columns:
 }
 \description{
 Given an input data frame, this function checks for the number of missing values
-(NA), the number of distinct values, and the data type of each variable. \code{NULL}
-values will be treated as a column of \code{NA}
+(NA), the number of distinct values, and the data type of each variable.
 }
 \examples{
 \dontrun{

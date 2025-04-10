@@ -5,12 +5,45 @@
 
 <!-- badges: start -->
 
+…
 [![R-CMD-check](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/DSCI-310-2025/predictdiabetes/graph/badge.svg)](https://app.codecov.io/gh/DSCI-310-2025/predictdiabetes)
 <!-- badges: end -->
 
-The goal of predictdiabetes is to …
+## Overview
+
+The goal of `predictdiabetes` is to provide functions that are useful
+for developing logistic regression models. This package was orginally
+designed for a logistic regression prediction model of diabetes risk
+based on BRFSS health indicators, but the package is designed to be
+applicable to other models.
+
+## Functions
+
+- `na_count_type`: Given an input data frame, check for the number of
+  missing values (NA), the number of distinct values, and the data type
+  of each variable.
+- `category_target`: Given an input dataframe with a categorical
+  variable, return the number and proportion of instances with each
+  category value, in alphabetical (for characters and logical) or
+  numerical (for integers) order
+- `categorical_bars`: Create a list of bar plots for each categorical
+  variable in a data frame.
+- `info_gain`: Calculate and sort information gain for feature
+  selection.
+- `plots_grid`: Combine a list or mulitple lists of `ggplot2` objects
+  into a single grid layout using `patchwork`. The number of columns in
+  the grid can be specified with `num_cols`.
+- `cramer_chi_results`: Runs chi-squared tests and calculates Cramer’s V
+  independently for each variable in a given data frame.
+- `lr_pipeline`: Trains and fits a logistic regression model and
+  cross-validates for optimal hyperparameter values.
+- `roc_plot`: Creates an ROC curve plot and saves it to the specified
+  file path.
+- `cm_plot`: Creates a confusion matrix plot and saves it to the
+  specified file path.
+- `coeff_plot`: Plot LASSO classification model coefficients.
 
 ## Installation
 
@@ -18,39 +51,60 @@ You can install the development version of predictdiabetes from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("DSCI-310-2025/predictdiabetes")
+# install.packages("devtools")
+devtools::install_github("DSCI-310-2025/predictdiabetes")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Begin with some EDA by checking the number of NAs, the number of
+distinct values and the data type in each column.
 
 ``` r
 library(predictdiabetes)
-## basic example code
+
+na_count_type(mtcars)
+#>                   mpg      cyl      disp     hp       drat     wt      
+#> NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     
+#> Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    
+#> Current_Data_Type "double" "double" "double" "double" "double" "double"
+#>                   qsec     vs       am       gear     carb    
+#> NA_Count          "0"      "0"      "0"      "0"      "0"     
+#> Distinct_Count    "30"     "2"      "2"      "3"      "6"     
+#> Current_Data_Type "double" "double" "double" "double" "double"
+#>                   mpg      cyl      disp     hp       drat     wt      
+#> NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     
+#> Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    
+#> Current_Data_Type "double" "double" "double" "double" "double" "double"
+#>                   qsec     vs       am       gear     carb    
+#> NA_Count          "0"      "0"      "0"      "0"      "0"     
+#> Distinct_Count    "30"     "2"      "2"      "3"      "6"     
+#> Current_Data_Type "double" "double" "double" "double" "double"
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+When building the model, you will likely want to understand the
+proportions of the binary variable of interest within each category for
+categorical variables. `predictdiabetes::categorical_bars()` can be used
+to provide plots for every provided categorical variable.
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+# Generate bar plots for categorical variables from the mtcars dataset
+bar_plots <- categorical_bars(
+  data_frame = mtcars,
+  cat_vars = c("cyl", "gear"),
+  target_col = "am",
+  title_size = 25,
+  axis_size = 20
+)
+# Display the first bar plot
+plot(bar_plots[["cyl"]])
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
-You can also embed plots, for example:
+After building the LASSO model, ROC plots would be beneficial to
+evaluate how your model would perform.
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+    #> Saving 7 x 5 in image
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+<img src="man/figures/README-output_plot-1.png" width="100%" />
