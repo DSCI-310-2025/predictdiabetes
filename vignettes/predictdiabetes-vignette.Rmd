@@ -15,8 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-install.packages("devtools")
-devtools::document()   # to update your NAMESPACE
+devtools::document()  
 devtools::install()    # to install your package locally
 
 ```
@@ -31,56 +30,11 @@ library(tibble)
 library(purrr)
 library(vcd)
 library(ggplot2)
+library(predictdiabetes)
 
 ```
 
-## Function Definition
 
-```{r define-function}
-quantitative_density <- function(data_frame, noncat_vars, target_col, title_size = 35, axis_size = 30) {
-  if (!target_col %in% colnames(data_frame)) {
-    stop(sprintf("Target column '%s' not found in data.", target_col))
-  }
-
-  missing_vars <- setdiff(noncat_vars, colnames(data_frame))
-  if (length(missing_vars) > 0) {
-    stop(sprintf("The following vars are missing in data: %s", paste(missing_vars, collapse = ", ")))
-  }
-
-  non_numeric <- noncat_vars[!sapply(data_frame[noncat_vars], is.numeric)]
-  if (length(non_numeric) > 0) {
-    stop(sprintf("The following vars are not numeric: %s", paste(non_numeric, collapse = ", ")))
-  }
-
-  if (ncol(data_frame) == 0) {
-    stop("Data frame has no columns. Cannot plot an empty dataset.")
-  }
-
-  density_plots <- list()
-  for (var in noncat_vars) {
-    p <- ggplot(data_frame, aes(x = !!sym(var), fill = as.factor(!!sym(target_col)))) +
-      geom_density(alpha = 0.5) +
-      scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
-      labs(
-        title = paste(target_col, "by", var),
-        x = var,
-        y = "Density",
-        fill = tools::toTitleCase(gsub("_", " ", target_col))
-      ) +
-      theme_minimal() +
-      theme(
-        axis.text = element_text(size = axis_size),
-        axis.title = element_text(size = axis_size),
-        plot.title = element_text(size = title_size, face = "bold"),
-        legend.key.size = unit(0.5, "cm"),
-        legend.text = element_text(size = 15),
-        legend.title = element_text(size = 20)
-      )
-    density_plots[[var]] <- p
-  }
-  return(density_plots)
-}
-```
 
 ## Generate Plots
 
@@ -115,55 +69,6 @@ density_plots[["wt"]]
 
 
 
-```{r}
-categorical_bars <- function(data_frame, cat_vars, target_col, title_size = 30, axis_size = 35) {
-  if (nrow(data_frame) == 0) {
-    stop("The provided data frame is empty.")
-  }
-
-  if (missing(cat_vars) || length(cat_vars) == 0) {
-    stop("Categorical variables must be specified.")
-  }
-
-  if (missing(target_col) || is.null(target_col)) {
-    stop("Target column must be specified.")
-  }
-
-  missing_vars <- setdiff(cat_vars, names(data_frame))
-  if (length(missing_vars) > 0) {
-    stop("The following categorical variable(s) are not found in the data frame: ", paste(missing_vars, collapse = ", "))
-  }
-
-  bar_plots <- list()
-
-  for (var in cat_vars) {
-    p <- ggplot2::ggplot(data_frame, ggplot2::aes(x = !!ggplot2::sym(var), fill = as.factor(!!ggplot2::sym(target_col)))) +
-      ggplot2::geom_bar(position = "fill") +
-      ggplot2::scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
-      ggplot2::labs(
-        title = paste(tools::toTitleCase(gsub("_", " ", target_col)), "by", var),
-        x = var,
-        y = "Proportion",
-        fill = tools::toTitleCase(gsub("_", " ", target_col))
-      ) +
-      ggplot2::theme_minimal() +
-      ggplot2::theme(
-        axis.text = ggplot2::element_text(size = axis_size),
-        axis.title = ggplot2::element_text(size = axis_size),
-        plot.title = ggplot2::element_text(size = title_size, face = "bold"),
-        legend.key.size = ggplot2::unit(2, "cm"),
-        legend.text = ggplot2::element_text(size = 8),
-        legend.title = ggplot2::element_text(size = 10)
-      )
-    bar_plots[[var]] <- p
-  }
-
-  return(bar_plots)
-}
-
-
-
-```
 
 
 
@@ -188,41 +93,6 @@ print(bar_plots[["cyl"]])
 
 
 
-
-## Function Definition
-```{r}
-cramer_chi_results <- function(df, categorical_vars, target_col) {
-  if (nrow(df) == 0) {
-    stop("Insufficient data: the dataframe is empty.")
-  }
-  
-  if (!is.character(categorical_vars)) {
-    stop("categorical_vars must be a character vector of column names.")
-  }
-  
-  missing_vars <- setdiff(categorical_vars, colnames(df))
-  if (length(missing_vars) > 0) {
-    stop(paste("The following variables are not present in the dataframe:", paste(missing_vars, collapse = ", ")))
-  }
-  
-  cramer_chi_results <- purrr::map_dfr(categorical_vars, function(var) {
-    tbl <- table(df[[var]], df[[target_col]])
-    test_result <- stats::chisq.test(tbl)
-    cv <- vcd::assocstats(tbl)$cramer
-    tibble::tibble(
-      Variable = var,
-      Statistic = test_result$statistic,
-      DF = test_result$parameter,
-      p_value = test_result$p.value,
-      Expected_Min = min(test_result$expected),
-      Expected_Max = max(test_result$expected),
-      CramersV = cv
-    )
-  })
-  
-  return(dplyr::arrange(cramer_chi_results, dplyr::desc(CramersV)))
-}
-```
 
 ```{r}
 # Convert existing variables to factors.
