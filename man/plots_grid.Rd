@@ -4,12 +4,10 @@
 \alias{plots_grid}
 \title{Grid of Plots}
 \usage{
-plots_grid(bar_plots, density_plots, num_cols = 3)
+plots_grid(bar_plots, num_cols = 3)
 }
 \arguments{
-\item{bar_plots}{A list of bar plot \code{ggplot2} objects.}
-
-\item{density_plots}{A list of quantitative density plot \code{ggplot2} objects.}
+\item{bar_plots}{A list of \code{ggplot2} bar plot objects.}
 
 \item{num_cols}{The number of columns in the grid (Default = 3).}
 }
@@ -17,7 +15,7 @@ plots_grid(bar_plots, density_plots, num_cols = 3)
 A \code{patchwork} / \code{ggplot2} object showing all input plots arranged.
 }
 \description{
-Combine a list or mulitple lists of \code{ggplot2} objects into a single
+Facet a list of \code{ggplot2} bar plot objects into a single
 grid layout using \code{patchwork}. The number of columns in the grid can be
 specified with \code{num_cols}.
 }
@@ -28,15 +26,10 @@ specified with \code{num_cols}.
     data_frame = mtcars,
     cat_vars = c("cyl", "gear"),
     target_col = "am"
-  )
-  # Generate example density plots
-  density_plots <- quantitative_density(
-    data_frame = mtcars,
-    noncat_vars = c("mpg", "hp", "wt"),
-    target_col = "am"
-  )
+    )
+    
   # Combine plots into a grid
-  grid_plot <- plots_grid(bar_plots, density_plots, num_cols = 2)
+  grid_plot <- plots_grid(bar_plots, num_cols = 2)
 }
 
 }
