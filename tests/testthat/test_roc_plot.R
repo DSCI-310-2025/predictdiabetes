@@ -93,7 +93,7 @@ test_that("AUC value above upper boundary fails", {
 # Test 10: Handle extreme predicted probabilities
 test_that("ROC plot handles extreme predicted probabilities", {
   expect_error(
-    roc_plot(model_outputs_extreme, "Diabetes_binary", ".pred_1", 0.85, "roc_curve_plot.png"),
+    roc_plot(model_outputs_extreme, "Diabetes_binary", ".pred_1", 0.85, tempfile(fileext = ".png")),
     NA
   )
 })
