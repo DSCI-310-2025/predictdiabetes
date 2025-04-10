@@ -9,6 +9,9 @@
 #' @param target_col Column of interest to plot each variable against (object).
 #' @param title_size Size of each plot's title (Default = 30).
 #' @param axis_size Size of each plot's axes (Default = 35).
+#' @param legend_key_size Size of the legend key (Default = 1 cm).
+#' @param legend_text_size Size of the legend text (Default = 12).
+#' @param legend_title_size Size of the legend title (Default = 12).
 #'
 #' @return A list containing \code{ggplot2} object(s) (bar plots).
 #'
@@ -22,13 +25,18 @@
 #'     cat_vars = c("cyl", "gear"),
 #'     target_col = "am",
 #'     title_size = 25,
-#'     axis_size = 20
+#'     axis_size = 20,
+#'     legend_key_size = 1.5,
+#'     legend_text_size = 14,
+#'     legend_title_size = 14
 #'   )
 #'   # Display the first bar plot
 #'   print(bar_plots[["cyl"]])
 #' }
 #'
-categorical_bars <- function(data_frame, cat_vars, target_col, title_size = 30, axis_size = 35) {
+categorical_bars <- function(data_frame, cat_vars, target_col,
+                             title_size = 30, axis_size = 35,
+                             legend_key_size = 1, legend_text_size = 12, legend_title_size = 12) {
   # Check if the data frame is empty
   if (nrow(data_frame) == 0) {
     stop("The provided data frame is empty.")
@@ -57,17 +65,17 @@ categorical_bars <- function(data_frame, cat_vars, target_col, title_size = 30, 
       ggplot2::geom_bar(position = "fill") +
       ggplot2::scale_fill_manual(values = c("#FF9999", "#66B2FF")) +
       ggplot2::labs(title = paste("Diabetes Binary by", var),
-           x = var,
-           y = "Proportion",
-           fill = "Diabetes Binary") +
+                    x = var,
+                    y = "Proportion",
+                    fill = "Diabetes Binary") +
       ggplot2::theme_minimal() +
       ggplot2::theme(
         axis.text = ggplot2::element_text(size = axis_size),
         axis.title = ggplot2::element_text(size = axis_size),
         plot.title = ggplot2::element_text(size = title_size, face = "bold"),
-        legend.key.size = ggplot2::unit(1, "cm"),
-        legend.text = ggplot2::element_text(size = 12),
-        legend.title = ggplot2::element_text(size = 12),
+        legend.key.size = ggplot2::unit(legend_key_size, "cm"),
+        legend.text = ggplot2::element_text(size = legend_text_size),
+        legend.title = ggplot2::element_text(size = legend_title_size)
       )
     bar_plots[[var]] <- p
   }

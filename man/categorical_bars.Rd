@@ -9,7 +9,10 @@ categorical_bars(
   cat_vars,
   target_col,
   title_size = 30,
-  axis_size = 35
+  axis_size = 35,
+  legend_key_size = 1,
+  legend_text_size = 12,
+  legend_title_size = 12
 )
 }
 \arguments{
@@ -22,6 +25,12 @@ categorical_bars(
 \item{title_size}{Size of each plot's title (Default = 30).}
 
 \item{axis_size}{Size of each plot's axes (Default = 35).}
+
+\item{legend_key_size}{Size of the legend key (Default = 1 cm).}
+
+\item{legend_text_size}{Size of the legend text (Default = 12).}
+
+\item{legend_title_size}{Size of the legend title (Default = 12).}
 }
 \value{
 A list containing \code{ggplot2} object(s) (bar plots).
@@ -39,7 +48,10 @@ color.
     cat_vars = c("cyl", "gear"),
     target_col = "am",
     title_size = 25,
-    axis_size = 20
+    axis_size = 20,
+    legend_key_size = 1.5,
+    legend_text_size = 14,
+    legend_title_size = 14
   )
   # Display the first bar plot
   print(bar_plots[["cyl"]])
