@@ -1,8 +1,5 @@
-# library(testthat)
-# source("~/work/R/categorical_bars.R")
-
 library(testthat)
-library(ggplot2)
+source("~/work/R/categorical_bars.R")
 
 # Sample testing data frame
 test_df <- data.frame(
@@ -37,7 +34,7 @@ test_that("categorical_bars plot titles and axis labels are correct", {
   result <- categorical_bars(
     data_frame = test_df,
     cat_vars = c("v1"),
-    target_col = "Diabetes_binary"
+    target_col = "target"
   )
 
   expect_true(grepl("Diabetes Binary by v1", result[["v1"]]$labels$title))
@@ -60,16 +57,16 @@ test_that("categorical_bars title and axis text sizes are correct", {
 
 # Edge cases
 test_that("categorical_bars handles empty data frame correctly", {
-  expect_error(categorical_bars(data_frame = data.frame(),
-                                cat_vars = c("v1"),
+  expect_error(categorical_bars(data_frame = data.frame(), 
+                                cat_vars = c("v1"), 
                                 target_col = "target"),
                "The provided data frame is empty.")
 })
 
 test_that("categorical_bars handles missing categorical variables correctly", {
   df <- data.frame(v1 = c("A", "B", "C"), target = c(1, 2, 1))
-  expect_error(categorical_bars(data_frame = df,
-                                cat_vars = c("v2"),
+  expect_error(categorical_bars(data_frame = df, 
+                                cat_vars = c("v2"), 
                                 target_col = "target"),
                regexp = "The following categorical variable\\(s\\) are not found in the data frame: v2")
 })
@@ -108,4 +105,3 @@ test_that("Check if cat_vars is specified", {
     "Categorical variables must be specified."
   )
 })
-
