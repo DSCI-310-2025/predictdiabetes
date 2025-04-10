@@ -1,5 +1,3 @@
-library(testthat)
-source("~/work/R/lr_pipeline.R")
 
 # Sample testing data frames
 df <- data.frame(
@@ -10,7 +8,7 @@ df <- data.frame(
 
 df_small <- data.frame(
   Diabetes_binary = sample(0:1, 5, replace = TRUE),
-  v1 = rnorm(5) 
+  v1 = rnorm(5)
 )
 
 # Expected cases
@@ -35,8 +33,8 @@ test_that("Pipeline model is trained and contains a fitted model", {
 # Edge cases
 test_that("Dataframe input into pipeline function should have more than 1 row", {
   df_single <- data.frame(
-    Diabetes_binary = 0, 
-    v1 = 1, 
+    Diabetes_binary = 0,
+    v1 = 1,
     v2 = 2
 )
   expect_error(lr_pipeline(df_single, "Diabetes_Binary", 5, 10, "recall", output_path))

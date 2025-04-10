@@ -1,6 +1,3 @@
-library(testthat)
-source("~/work/R/categorical_bars.R")
-
 # Sample testing data frame
 test_df <- data.frame(
   v1 = factor(c(4, 6, 6, 8, 4)),
@@ -57,16 +54,16 @@ test_that("categorical_bars title and axis text sizes are correct", {
 
 # Edge cases
 test_that("categorical_bars handles empty data frame correctly", {
-  expect_error(categorical_bars(data_frame = data.frame(), 
-                                cat_vars = c("v1"), 
+  expect_error(categorical_bars(data_frame = data.frame(),
+                                cat_vars = c("v1"),
                                 target_col = "target"),
                "The provided data frame is empty.")
 })
 
 test_that("categorical_bars handles missing categorical variables correctly", {
   df <- data.frame(v1 = c("A", "B", "C"), target = c(1, 2, 1))
-  expect_error(categorical_bars(data_frame = df, 
-                                cat_vars = c("v2"), 
+  expect_error(categorical_bars(data_frame = df,
+                                cat_vars = c("v2"),
                                 target_col = "target"),
                regexp = "The following categorical variable\\(s\\) are not found in the data frame: v2")
 })

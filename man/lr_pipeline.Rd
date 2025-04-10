@@ -2,7 +2,7 @@
 % Please edit documentation in R/lr_pipeline.R
 \name{lr_pipeline}
 \alias{lr_pipeline}
-\title{Logistic Regression Pipeline}
+\title{Logistic Regression Binary Classification Pipeline}
 \usage{
 lr_pipeline(
   data,
@@ -27,16 +27,16 @@ lr_pipeline(
 \item{output_path}{String path location to save the model as an RDS object.}
 }
 \value{
-An RDS object
+An RDS file containing the workflow object
 }
 \description{
 Trains and fits a logistic regression model and cross-validates for optimal
-hyperparameter values
+hyperparameter values.
 }
 \examples{
 \dontrun{
-  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10,
-  tuning_metric = "recall", output_path = "lasso_tuned_wflow.RDS")
+  lr_pipeline(mtcars, "am", vfolds = 5, grid_size = 10, tuning_metric = "recall",
+  output_path = "lasso_tuned_wflow.RDS")
 }
 
 }

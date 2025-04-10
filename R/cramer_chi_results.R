@@ -1,28 +1,28 @@
 #' Table of Chi-Squared Test and Cramer's V Results
-#' 
+#'
 #' Runs chi-squared tests and calculates Cramer's V independently for each variable
 #' in a given data frame
 #'
-#' @param data_frame A data frame or data frame extension (e.g. a tibble).
-#' @param cat_vars A vector containing the string name(s) of each **categorical** variable in the data frame.
+#' @param df A data frame or data frame extension (e.g. a tibble).
+#' @param categorical_vars A vector containing the string name(s) of each **categorical** variable in the data frame.
 #' @param target_col A string specifying the categorical variable against which chi-squared tests will be performed.
-#' 
+#'
 #' @return Data frame with 1 row per variable and 7 columns:
 #'    - Variable: Name of categorical variable.
-#'    - Statistic: Chi-squared test statistic. 
+#'    - Statistic: Chi-squared test statistic.
 #'    - DF: Degrees of freedom.
 #'    - p_value: p-value from chi-squared test.
 #'    - Expected_Min: Minimum expected value.
 #'    - Expected_Max: Maximum expected value.
 #'    - CramersV: Cramer's V statistic.
-#'    
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' \dontrun{
 #'   cramer_chi_results(mtcars, c("cyl", "gear"), "mpg")
 #' }
-#' 
+#'
 cramer_chi_results <- function(df, categorical_vars, target_col) {
   if (nrow(df) == 0) {
     stop("Insufficient data: the dataframe is empty.")
