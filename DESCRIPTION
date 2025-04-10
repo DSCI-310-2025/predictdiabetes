@@ -3,7 +3,6 @@ Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
     person("dkln", "klht", email = "dkln.klht@group6.com", role = c("aut", "cre"))
-Author: dkln klht <dkln.klht@group6.com>
 Maintainer: dkln klht <dkln.klht@group6.com>
 Description: Function used for group 6 R analysis. These include visualizations, helping create pip for workflow for logistic regression model.
 License: MIT + file LICENSE
@@ -13,6 +12,8 @@ RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
+    grDevices,
+    glmnet,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://dsci-310-2025.github.io/predictdiabetes/
@@ -35,5 +36,5 @@ Imports:
     yardstick,
     broom,
     FSelectorRcpp,
-    glmnet
+    magrittr
 VignetteBuilder: knitr
