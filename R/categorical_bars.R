@@ -56,10 +56,10 @@ categorical_bars <- function(data_frame, cat_vars, target_col, title_size = 30, 
     p <- ggplot2::ggplot(data_frame, ggplot2::aes(x = !!ggplot2::sym(var), fill = as.factor(!!ggplot2::sym(target_col)))) +
       ggplot2::geom_bar(position = "fill") + 
       ggplot2::scale_fill_manual(values = c("#FF9999", "#66B2FF")) + 
-      ggplot2::labs(title = paste("target_col by", var),
+      ggplot2::labs(title = paste(tools::toTitleCase(gsub("_", " ", target_col)), "by", var),
            x = var,
            y = "Proportion",
-           fill = "target_col") +
+           fill = tools::toTitleCase(gsub("_", " ", target_col))) +
       ggplot2::theme_minimal() + 
       ggplot2::theme(
         axis.text = ggplot2::element_text(size = axis_size),
