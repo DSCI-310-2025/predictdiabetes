@@ -6,28 +6,22 @@
 #' @param output_path A character string specifying the file path to save the confusion matrix plot.
 #'
 #' @return A ggplot2 object displaying a tile heatmap of the confusion matrix.
-#' @importFrom grDevices pdf
+#'
 #' @export
+#' 
 #' @examples
 #' # Example usage:
 #' # Assuming you have a confusion matrix object from yardstick::conf_mat
-#' \dontrun{
-#'   cm <- data.frame(
-#'     Prediction = c("Positive", "Negative", "Positive", "Negative"),
-#'     Truth = c("Positive", "Positive", "Negative", "Negative"),
-#'     Freq = c(50, 10, 5, 100)
-#'   )
-#'   cm_plot(cm, "confusion_matrix_plot.png")
-#' }
-utils::globalVariables(c("Prediction", "Truth", "Freq"))
+#' cm_plot(cm, "confusion_matrix_plot.png")
+#' 
 cm_plot <- function(conf_matrix_df, output_path) {
-  
+
   # Check if required columns are present
   required_columns <- c("Prediction", "Truth", "Freq")
   if (!all(required_columns %in% colnames(conf_matrix_df))) {
     stop("columns in conf_matrix_df must contain 'Prediction', 'Truth', and 'Freq'")
   }
-  
+
   # check if output path's directory exist
   output_dir <- dirname(output_path)
   if (!dir.exists(output_dir)) {
@@ -35,7 +29,7 @@ cm_plot <- function(conf_matrix_df, output_path) {
   }
 
   if(!interactive()) pdf(NULL)
-  
+
   output_plot <- ggplot2::ggplot(
     conf_matrix_df,
     ggplot2::aes(
@@ -65,10 +59,8 @@ cm_plot <- function(conf_matrix_df, output_path) {
       panel.grid = ggplot2::element_blank()
     ) +
     ggplot2::guides(fill = "none")
-  
-  ggplot2::ggsave(output_path, output_plot, width = 8, height = 8, dpi = 300, limitsize = FALSE)
+
+  ggplot2::ggsave(output_path, output_plot)
   
   return(output_plot)
 }
-
-

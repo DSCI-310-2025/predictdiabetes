@@ -1,5 +1,5 @@
-# library(testthat)
-# source("~/work/R/category_target.R")
+library(testthat)
+source("~/work/R/category_target.R")
 
 # Sample data frame with various categorical and mixed-type variables
 case_1 <- data.frame(

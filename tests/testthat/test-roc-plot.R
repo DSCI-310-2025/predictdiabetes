@@ -1,5 +1,5 @@
-# library(testthat)
-# source("~/work/R/roc_plot.R")
+library(testthat)
+source("~/work/R/roc_plot.R")
 
 # ------------------------------------------------------------------------------
 # Sample data for testing
