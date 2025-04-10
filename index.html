@@ -55,36 +55,85 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of predictdiabetes is to …</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>The goal of <code>predictdiabetes</code> is to provide functions that are useful for developing logistic regression models. This package was orginally designed for a logistic regression prediction model of diabetes risk based on BRFSS health indicators, but the package is designed to be applicable to other models.</p>
+</div>
+<div class="section level2">
+<h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+</h2>
+<ul>
+<li>
+<code>na_count_type</code>: Given an input data frame, check for the number of missing values (NA), the number of distinct values, and the data type of each variable.</li>
+<li>
+<code>category_target</code>: Given an input dataframe with a categorical variable, return the number and proportion of instances with each category value, in alphabetical (for characters and logical) or numerical (for integers) order</li>
+<li>
+<code>categorical_bars</code>: Create a list of bar plots for each categorical variable in a data frame.</li>
+<li>
+<code>info_gain</code>: Calculate and sort information gain for feature selection.</li>
+<li>
+<code>plots_grid</code>: Combine a list or mulitple lists of <code>ggplot2</code> objects into a single grid layout using <code>patchwork</code>. The number of columns in the grid can be specified with <code>num_cols</code>.</li>
+<li>
+<code>cramer_chi_results</code>: Runs chi-squared tests and calculates Cramer’s V independently for each variable in a given data frame.</li>
+<li>
+<code>lr_pipeline</code>: Trains and fits a logistic regression model and cross-validates for optimal hyperparameter values.</li>
+<li>
+<code>roc_plot</code>: Creates an ROC curve plot and saves it to the specified file path.</li>
+<li>
+<code>cm_plot</code>: Creates a confusion matrix plot and saves it to the specified file path.</li>
+<li>
+<code>coeff_plot</code>: Plot LASSO classification model coefficients.</li>
+</ul>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of predictdiabetes from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"DSCI-310-2025/predictdiabetes"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DSCI-310-2025/predictdiabetes"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>Begin with some EDA by checking the number of NAs, the number of distinct values and the data type in each column.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dsci-310-2025.github.io/predictdiabetes/">predictdiabetes</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
+<span></span>
+<span><span class="fu"><a href="reference/na_count_type.html">na_count_type</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   mpg      cyl      disp     hp       drat     wt      </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double" "double"</span></span>
+<span><span class="co">#&gt;                   qsec     vs       am       gear     carb    </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "30"     "2"      "2"      "3"      "6"     </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double"</span></span>
+<span><span class="co">#&gt;                   mpg      cyl      disp     hp       drat     wt      </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double" "double"</span></span>
+<span><span class="co">#&gt;                   qsec     vs       am       gear     carb    </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "30"     "2"      "2"      "3"      "6"     </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double"</span></span></code></pre></div>
+<p>When building the model, you will likely want to understand the proportions of the binary variable of interest within each category for categorical variables. <code><a href="reference/categorical_bars.html">predictdiabetes::categorical_bars()</a></code> can be used to provide plots for every provided categorical variable.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      speed           dist       </span></span>
-<span><span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span></span>
-<span><span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span></span>
-<span><span class="co">#&gt;  Median :15.0   Median : 36.00  </span></span>
-<span><span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span></span>
-<span><span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code>devtools::build_readme()</code> is handy for this.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<code class="sourceCode R"><span><span class="co"># Generate bar plots for categorical variables from the mtcars dataset</span></span>
+<span><span class="va">bar_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/categorical_bars.html">categorical_bars</a></span><span class="op">(</span></span>
+<span>  data_frame <span class="op">=</span> <span class="va">mtcars</span>,</span>
+<span>  cat_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span><span class="op">)</span>,</span>
+<span>  target_col <span class="op">=</span> <span class="st">"am"</span>,</span>
+<span>  title_size <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  axis_size <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Display the first bar plot </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bar_plots</span><span class="op">[[</span><span class="st">"cyl"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
+<p>After building the LASSO model, ROC plots would be beneficial to evaluate how your model would perform.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt; Saving 7 x 5 in image</span></span></code></pre></div>
+<p><img src="reference/figures/README-output_plot-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
