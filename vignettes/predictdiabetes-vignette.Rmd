@@ -17,3 +17,48 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(predictdiabetes)
 ```
+
+
+## Generate Plots
+
+```{r, fig.width=7, fig.height=5}
+## Generate Bar Plots Using mtcars
+# First, convert variables to factors since mtcars stores them as numeric
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+mtcars$am   <- as.factor(mtcars$am)
+
+bar_plots <- categorical_bars(
+  data_frame = mtcars,
+  cat_vars = c("cyl", "gear"),
+  target_col = "am",
+  title_size = 15,
+  axis_size = 20
+)
+
+## Display one of the bar plots, e.g., for cyl:
+(bar_plots[["cyl"]])
+```
+
+
+```{r}
+# Convert existing variables to factors.
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+
+# Create a binary categorical variable from 'mpg':
+# 'High' if mpg is at or above the median, and 'Low' otherwise.
+mtcars$mpg_cat <- ifelse(mtcars$mpg >= median(mtcars$mpg), "High", "Low")
+mtcars$mpg_cat <- as.factor(mtcars$mpg_cat)
+```
+
+```{r}
+chi_results <- cramer_chi_results(
+  df = mtcars, 
+  categorical_vars = c("cyl", "gear"), 
+  target_col = "mpg_cat"
+)
+
+# Display the resulting summary table.
+chi_results
+```
