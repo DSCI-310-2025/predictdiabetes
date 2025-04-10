@@ -66,12 +66,18 @@ test_that("roc_plot has exactly 3 layers", {
 
 # Test 6: AUC value at lower boundary (0)
 test_that("AUC value at lower boundary works", {
-  expect_silent(roc_plot(test_data, "Diabetes_binary", ".pred_1", 0, tempfile(fileext = ".png")))
+  expect_message(
+    roc_plot(test_data, "Diabetes_binary", ".pred_1", 0, tempfile(fileext = ".png")),
+    "Saving 7 x 7 in image"
+  )
 })
 
 # Test 7: AUC value at upper boundary (1)
 test_that("AUC value at upper boundary works", {
-  expect_silent(roc_plot(test_data, "Diabetes_binary", ".pred_1", 1, tempfile(fileext = ".png")))
+  expect_message(
+    roc_plot(test_data, "Diabetes_binary", ".pred_1", 1, tempfile(fileext = ".png")),
+    "Saving 7 x 7 in image"
+  )
 })
 
 # Test 8: AUC value below lower boundary
