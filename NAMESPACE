@@ -3,6 +3,7 @@
 export(categorical_bars)
 export(cm_plot)
 export(coeff_plot)
+export(cramer_chi_results)
 importFrom(dplyr,"%>%")
 importFrom(dplyr,filter)
 importFrom(dplyr,mutate)

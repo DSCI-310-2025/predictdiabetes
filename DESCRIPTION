@@ -17,7 +17,10 @@ Imports:
     workflows,
     recipes,
     parsnip,
-    glmnet
+    glmnet,
+    purrr,
+    tibble,
+    vcd
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
