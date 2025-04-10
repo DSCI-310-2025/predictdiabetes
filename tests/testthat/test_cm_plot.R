@@ -1,6 +1,8 @@
+
 # expected cases ----------------------------------------------------------------
 
 test_that("cm_plot has the correct layers", {
+
   conf_matrix_df <- data.frame(
     Prediction = c("Positive", "Negative", "Positive", "Negative"),
     Truth = c("Positive", "Positive", "Negative", "Negative"),
@@ -11,9 +13,11 @@ test_that("cm_plot has the correct layers", {
 
   expect_true(inherits(plot$layers[[1]]$geom, "GeomTile"))
   expect_true(inherits(plot$layers[[2]]$geom, "GeomText"))
+
 })
 
 test_that("cm_plot creates a PNG file", {
+
   conf_matrix_df <- data.frame(
     Prediction = c("Positive", "Negative", "Positive", "Negative"),
     Truth = c("Positive", "Positive", "Negative", "Negative"),
@@ -53,6 +57,7 @@ test_that("cm_plot creates a correct plot for multiple classes", {
 
 
 test_that("cm_plot handles empty data frame gracefully", {
+
   empty_df <- data.frame(
     Prediction = character(0),
     Truth = character(0),
