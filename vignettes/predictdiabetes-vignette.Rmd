@@ -15,16 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-remove.packages("predictdiabetes")
-packages_to_remove <- c(
-  "tidymodels", "rsample", "recipes", "parsnip", "workflows",
-  "broom", "glmnet", "dplyr", "ggplot2", "devtools",
-  "FSelectorRcpp", "tidyverse"
-)
 
-remove.packages(packages_to_remove)
-
-devtools::install_github("DSCI-310-2025/predictdiabetes")
 install.packages("glmnet")
 library(glmnet)
 library(predictdiabetes)
