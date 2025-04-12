@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>predictdiabetes-vignette • predictdiabetes</title>
+<title>PredictDiabetes Vignette: Classification with Iris Dataset • predictdiabetes</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="predictdiabetes-vignette">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="PredictDiabetes Vignette: Classification with Iris Dataset">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/predictdiabetes-vignette.html">predictdiabetes-vignette</a></li>
+<li><a class="dropdown-item" href="../articles/predictdiabetes-vignette.html">PredictDiabetes Vignette: Classification with Iris Dataset</a></li>
   </ul>
 </li>
       </ul>
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>predictdiabetes-vignette</h1>
+      <h1>PredictDiabetes Vignette: Classification with Iris Dataset</h1>
             
       
 
@@ -66,53 +66,275 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dsci-310-2025.github.io/predictdiabetes/">predictdiabetes</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="generate-plots">Generate Plots<a class="anchor" aria-label="anchor" href="#generate-plots"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>The predictdiabetes package provides tools for binary classification
+tasks, including: - Exploratory Data Analysis (EDA): Visualizations and
+statistical tests - Feature Selection: Identifying important predictors
+- Modeling: Logistic regression pipeline with automated tuning</p>
+<p>This vignette demonstrates the workflow using the iris dataset, where
+we: 1.Convert Sepal.Length, Sepal.Width, Petal.Length, and Petal.Width
+into categorical predictors, and add some noise into the dataset (Noise1
+and Noise2) so we won’t have perfect metrics (since our dataset is quite
+small). 2. Use Species as a binary target (setosa vs. others)</p>
+<div class="section level3">
+<h3 id="data-preparation">Data Preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
+</h3>
+<p>Firstly, we modified the original iris dataset behind the scenes: we
+transformed the numeric predictors into categorical values and added
+some noise to make the task more challenging. Additionally, we
+introduced synthetic data to increase the sample size.</p>
+<p>Lets get a glipse of the processed iris dataframe.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Generate Bar Plots Using mtcars</span></span>
-<span><span class="co"># First, convert variables to factors since mtcars stores them as numeric</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">bar_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorical_bars.html">categorical_bars</a></span><span class="op">(</span></span>
-<span>  data_frame <span class="op">=</span> <span class="va">mtcars</span>,</span>
-<span>  cat_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span><span class="op">)</span>,</span>
-<span>  target_col <span class="op">=</span> <span class="st">"am"</span>,</span>
-<span>  title_size <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  axis_size <span class="op">=</span> <span class="fl">20</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## Display one of the bar plots, e.g., for cyl:</span></span>
-<span><span class="op">(</span><span class="va">bar_plots</span><span class="op">[[</span><span class="st">"cyl"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
+<code class="sourceCode R"><span><span class="co"># head of the transformed iris dataset we will play with that has also been upsampled.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris_processed</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Noise1   Noise2</span></span>
+<span><span class="co">#&gt; 1          Low      Medium          Low         Low  setosa   Blue   Circle</span></span>
+<span><span class="co">#&gt; 2          Low      Medium          Low         Low  setosa   Blue Triangle</span></span>
+<span><span class="co">#&gt; 3          Low      Medium          Low         Low  setosa   Blue   Square</span></span>
+<span><span class="co">#&gt; 4          Low      Medium          Low         Low  setosa  Green   Circle</span></span>
+<span><span class="co">#&gt; 5          Low      Medium          Low         Low  setosa   Blue Triangle</span></span></code></pre></div>
+<p>Next, lets split the dataframe into training and test set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Convert existing variables to factors.</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Split into training (75%) and testing (25%) sets</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">iris_processed</span>, prop <span class="op">=</span> <span class="fl">0.75</span>, strata <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
+<span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
+<span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create a binary categorical variable from 'mpg':</span></span>
-<span><span class="co"># 'High' if mpg is at or above the median, and 'Low' otherwise.</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span>, <span class="st">"High"</span>, <span class="st">"Low"</span><span class="op">)</span></span>
-<span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg_cat</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chi_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cramer_chi_results.html">cramer_chi_results</a></span><span class="op">(</span></span>
-<span>  df <span class="op">=</span> <span class="va">mtcars</span>, </span>
-<span>  categorical_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span><span class="op">)</span>, </span>
-<span>  target_col <span class="op">=</span> <span class="st">"mpg_cat"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in stats::chisq.test(tbl): Chi-squared approximation may be incorrect</span></span>
-<span><span class="co">#&gt; Warning in stats::chisq.test(tbl): Chi-squared approximation may be incorrect</span></span>
-<span></span>
-<span><span class="co"># Display the resulting summary table.</span></span>
-<span><span class="va">chi_results</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
-<span><span class="co">#&gt;   Variable Statistic    DF   p_value Expected_Min Expected_Max CramersV</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> cyl           22.5     2 0.000<span style="text-decoration: underline;">012</span>8         3.28         7.44    0.839</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> gear          13.9     2 0.000<span style="text-decoration: underline;">977</span>          2.34         7.97    0.658</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">train_data</span>, n<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Noise1   Noise2</span></span>
+<span><span class="co">#&gt; 1         High      Medium       Medium      Medium   other    Red Triangle</span></span>
+<span><span class="co">#&gt; 2          Low         Low       Medium      Medium   other    Red   Square</span></span>
+<span><span class="co">#&gt; 3       Medium         Low       Medium      Medium   other  Green Triangle</span></span></code></pre></div>
 </div>
-  </main>
+<div class="section level3">
+<h3 id="exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)<a class="anchor" aria-label="anchor" href="#exploratory-data-analysis-eda"></a>
+</h3>
+<div class="section level4">
+<h4 id="target-variable-distribution">1. Target Variable Distribution<a class="anchor" aria-label="anchor" href="#target-variable-distribution"></a>
+</h4>
+<p>Check the distribution of the binary target variable (Species) using
+<code><a href="../reference/category_target.html">category_target()</a></code> to assess any class imbalance.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/category_target.html">category_target</a></span><span class="op">(</span><span class="va">train_data</span>, <span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<span><span class="co">#&gt;   Species Count Proportion</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> other     220      0.588</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> setosa    154      0.412</span></span></code></pre></div>
+<p><em>Interpretation</em>: We will use the rule of thumb that a dataset
+is considered imbalanced when the minority class represents less than
+10–20% of the data. Based on this, our dataset is only slightly
+imbalanced (45% Setosa, 54% other). We will proceed with this slightly
+imbalanced dataset without applying any balancing techniques.</p>
+</div>
+<div class="section level4">
+<h4 id="na-summary">2. NA Summary<a class="anchor" aria-label="anchor" href="#na-summary"></a>
+</h4>
+<p>Use <code><a href="../reference/na_count_type.html">na_count_type()</a></code> to identify missing values and data
+types.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/na_count_type.html">na_count_type</a></span><span class="op">(</span><span class="va">train_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   Sepal.Length Sepal.Width Petal.Length Petal.Width Species  </span></span>
+<span><span class="co">#&gt; NA_Count          "0"          "0"         "0"          "0"         "0"      </span></span>
+<span><span class="co">#&gt; Distinct_Count    "3"          "3"         "3"          "3"         "2"      </span></span>
+<span><span class="co">#&gt; Current_Data_Type "integer"    "integer"   "integer"    "integer"   "integer"</span></span>
+<span><span class="co">#&gt;                   Noise1    Noise2   </span></span>
+<span><span class="co">#&gt; NA_Count          "0"       "0"      </span></span>
+<span><span class="co">#&gt; Distinct_Count    "3"       "3"      </span></span>
+<span><span class="co">#&gt; Current_Data_Type "integer" "integer"</span></span></code></pre></div>
+<p><em>Interpretation</em>: No missing values detected for all columns.
+Yay! No need to drop any rows.</p>
+</div>
+<div class="section level4">
+<h4 id="bar-plots-of-predictors-vs--target">3. Bar Plots of Predictors vs. Target<a class="anchor" aria-label="anchor" href="#bar-plots-of-predictors-vs--target"></a>
+</h4>
+<p><code><a href="../reference/categorical_bars.html">categorical_bars()</a></code> and <code>plot_grid()</code> together
+makes it easy to visualize the relationship between the predictor to
+it’s target variable. In this case, <code>species</code> is our
+target.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># this create a list of bar_plots</span></span>
+<span><span class="va">bar_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorical_bars.html">categorical_bars</a></span><span class="op">(</span></span>
+<span>  data_frame <span class="op">=</span> <span class="va">train_data</span>,</span>
+<span>  cat_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>, <span class="st">"Noise1"</span>, <span class="st">"Noise2"</span><span class="op">)</span>,</span>
+<span>  target_col <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>  title_size <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  axis_size <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Display plots in a 2x2 grid</span></span>
+<span><span class="fu"><a href="../reference/plots_grid.html">plots_grid</a></span><span class="op">(</span><span class="va">bar_plots</span>, num_cols <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-9-1.png" width="672"><em>Key Insight</em>: Petal.Length and Petal.Width has a better
+separation between classes (potential strong predictors) compare to
+other variables.</p>
+</div>
+<div class="section level4">
+<h4 id="statistical-association-tests">4. Statistical Association Tests<a class="anchor" aria-label="anchor" href="#statistical-association-tests"></a>
+</h4>
+<p>Use <code><a href="../reference/cramer_chi_results.html">cramer_chi_results()</a></code> to compute Cramér’s V and
+chi-squared p-values to quantify predictor-target relationships</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cramer_chi_results.html">cramer_chi_results</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">train_data</span>,</span>
+<span>  categorical_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>, <span class="st">"Noise1"</span>, <span class="st">"Noise2"</span><span class="op">)</span>,</span>
+<span>  target_col <span class="op">=</span> <span class="st">"Species"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
+<span><span class="co">#&gt;   Variable     Statistic    DF       p_value Expected_Min Expected_Max CramersV</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Petal.Width     39.5       2 0.000<span style="text-decoration: underline;">000</span>002<span style="text-decoration: underline;">61</span>         46.5         77.6   0.325 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Petal.Length    29.7       2 0.000<span style="text-decoration: underline;">000</span>356           45.3         78.2   0.282 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Sepal.Length    24.1       2 0.000<span style="text-decoration: underline;">005</span>90            38.3         90     0.254 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sepal.Width      8.33      2 0.015<span style="text-decoration: underline;">5</span>                42.8         88.8   0.149 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Noise2           1.46      2 0.482                 45.7         78.2   0.062<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Noise1           0.419     2 0.811                 44.5         81.2   0.033<span style="text-decoration: underline;">5</span></span></span></code></pre></div>
+<p><em>Key insight</em>: The results indicate that Petal.Length and
+Sepal.Width have statistically significant associations with the target
+variable, suggesting they are valuable predictors for classification. On
+the other hand, Noise1 and Noise2 show weak associations, making them
+less useful for predicting the target.</p>
+</div>
+<div class="section level4">
+<h4 id="feature-importance-via-information-gain">5. Feature Importance via Information Gain<a class="anchor" aria-label="anchor" href="#feature-importance-via-information-gain"></a>
+</h4>
+<p>Identify the most informative predictors using
+<code><a href="../reference/info_gain.html">info_gain()</a></code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Compute information gain with respect to 'am'</span></span>
+<span><span class="fu"><a href="../reference/info_gain.html">info_gain</a></span><span class="op">(</span><span class="va">train_data</span>, <span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="va">Noise1</span> <span class="op">+</span> <span class="va">Noise2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       Variable Information_Gain</span></span>
+<span><span class="co">#&gt; 1  Petal.Width     0.0527502547</span></span>
+<span><span class="co">#&gt; 2 Petal.Length     0.0402172941</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length     0.0325058489</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width     0.0112076589</span></span>
+<span><span class="co">#&gt; 5       Noise2     0.0019446700</span></span>
+<span><span class="co">#&gt; 6       Noise1     0.0005608722</span></span></code></pre></div>
+<p><em>Key insight</em>: The information gain values show that
+Petal.Width provides the most information for predicting the target
+variable. Noise2 contributes very little to the prediction task,
+suggesting it should be dropped from the model.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># drop Noise2 as it contribute to the model very little</span></span>
+<span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="va">train_data</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">Noise2</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="modeling">Modeling<a class="anchor" aria-label="anchor" href="#modeling"></a>
+</h3>
+<div class="section level4">
+<h4 id="logistic-regression-pipeline">Logistic Regression Pipeline<a class="anchor" aria-label="anchor" href="#logistic-regression-pipeline"></a>
+</h4>
+<p>We use the <code><a href="../reference/lr_pipeline.html">lr_pipeline()</a></code> function automates logistic
+regression training, tuning, and model saving.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model_workflow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lr_pipeline.html">lr_pipeline</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">train_data</span>,</span>
+<span>  target_col <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>  vfolds <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  grid_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  tuning_metric <span class="op">=</span> <span class="st">"recall"</span>,</span>
+<span>  output_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".rds"</span><span class="op">)</span>  <span class="co"># this is a temporary path, in an actual project, use the actual path</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="section level5">
+<h5 id="lasso-classification-model-coefficients">LASSO Classification Model Coefficients<a class="anchor" aria-label="anchor" href="#lasso-classification-model-coefficients"></a>
+</h5>
+<p>Visualize the coefficients of the logistic regression model using
+<code><a href="../reference/coeff_plot.html">coeff_plot()</a></code></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/coeff_plot.html">coeff_plot</a></span><span class="op">(</span><span class="va">model_workflow</span><span class="op">)</span></span></code></pre></div>
+<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-14-1.png" width="672"><em>Interpretation</em>: We can see that Petal.Width_Low and
+Petal.Length_Medium have the largest coefficients—positive and negative,
+respectively.</p>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="evaluation-on-test-set">Evaluation on Test Set<a class="anchor" aria-label="anchor" href="#evaluation-on-test-set"></a>
+</h3>
+<p>Generate predictions and probabilities on the test set:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lasso_modelOutputs</span> <span class="op">&lt;-</span> <span class="va">test_data</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">model_workflow</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span>, </span>
+<span>        <span class="va">model_workflow</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">test_data</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lasso_modelOutputs</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Noise1   Noise2</span></span>
+<span><span class="co">#&gt; 1          Low      Medium          Low         Low  setosa   Blue   Circle</span></span>
+<span><span class="co">#&gt; 2          Low      Medium          Low         Low  setosa  Green Triangle</span></span>
+<span><span class="co">#&gt; 3          Low      Medium          Low         Low  setosa  Green Triangle</span></span>
+<span><span class="co">#&gt; 4          Low        High          Low         Low  setosa   Blue   Circle</span></span>
+<span><span class="co">#&gt; 5          Low      Medium          Low         Low  setosa    Red Triangle</span></span>
+<span><span class="co">#&gt; 6          Low      Medium          Low         Low  setosa   Blue   Square</span></span>
+<span><span class="co">#&gt;   .pred_class .pred_other .pred_setosa</span></span>
+<span><span class="co">#&gt; 1      setosa   0.2583379    0.7416621</span></span>
+<span><span class="co">#&gt; 2      setosa   0.2247421    0.7752579</span></span>
+<span><span class="co">#&gt; 3      setosa   0.2247421    0.7752579</span></span>
+<span><span class="co">#&gt; 4      setosa   0.2129364    0.7870636</span></span>
+<span><span class="co">#&gt; 5      setosa   0.2583379    0.7416621</span></span>
+<span><span class="co">#&gt; 6      setosa   0.2583379    0.7416621</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="performance-metrics">Performance Metrics<a class="anchor" aria-label="anchor" href="#performance-metrics"></a>
+</h4>
+<p>Calculate ROC AUC to evaluate model performance and plot the ROC
+curve using <code><a href="../reference/roc_plot.html">roc_plot()</a></code></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate roc metrics</span></span>
+<span><span class="va">roc_metric</span> <span class="op">&lt;-</span> <span class="fu">roc_auc</span><span class="op">(</span></span>
+<span>  <span class="va">lasso_modelOutputs</span>,</span>
+<span>  truth <span class="op">=</span> <span class="va">Species</span>,</span>
+<span>  <span class="va">.pred_setosa</span>,</span>
+<span>  event_level <span class="op">=</span> <span class="st">"second"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">plot_path1</span> <span class="op">&lt;-</span> <span class="st">"../man/figures/VIGNETTE-rocplot.png"</span></span>
+<span></span>
+<span><span class="va">roc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_plot.html">roc_plot</a></span><span class="op">(</span>model_outputs <span class="op">=</span> <span class="va">lasso_modelOutputs</span>,</span>
+<span>         true_class <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>         predicted_probs <span class="op">=</span> <span class="st">".pred_setosa"</span>,</span>
+<span>         roc_auc_value <span class="op">=</span> <span class="va">roc_metric</span><span class="op">$</span><span class="va">.estimate</span>,</span>
+<span>         output_path <span class="op">=</span> <span class="va">plot_path1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/VIGNETTE-rocplot.png" width="60%" style="display: block; margin: auto;"><em>Interpretation</em>: We can see from the plot that our model
+achieved an AUC of 0.745, which is fairly modest. This result is
+expected since we intentionally added noise to the dataset and the
+dataset is still relatively small.</p>
+<div class="section level5">
+<h5 id="confusion-matrix">Confusion Matrix<a class="anchor" aria-label="anchor" href="#confusion-matrix"></a>
+</h5>
+<p>Plot the confusion matrix using <code><a href="../reference/cm_plot.html">cm_plot()</a></code> assess model
+performance:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Confusion matrix</span></span>
+<span></span>
+<span><span class="va">plot_path2</span> <span class="op">&lt;-</span> <span class="st">"../man/figures/VIGNETTE-cmplot.png"</span></span>
+<span></span>
+<span><span class="va">cm_df</span> <span class="op">&lt;-</span> <span class="fu">conf_mat</span><span class="op">(</span><span class="va">lasso_modelOutputs</span>, truth <span class="op">=</span> <span class="va">Species</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span><span class="op">$</span><span class="va">table</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/cm_plot.html">cm_plot</a></span><span class="op">(</span><span class="va">plot_path2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/VIGNETTE-cmplot.png" width="60%" style="display: block; margin: auto;"><em>Interpretation</em>: The confusion matrix shows that the model
+correctly classified 26 setosa and 60 other samples, but also
+misclassified 26 setosa as other and 14 other as setosa. This indicates
+that the model struggles with distinguishing setosa from other,
+particularly overpredicting the other class.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
+<p>The <code>predictdiabetes</code> package simplifies key steps in
+binary classification, from EDA and preprocessing to model training and
+evaluation. This vignette demonstrates its capabilities using the Iris
+dataset, but the package can be extended to real-world classification
+tasks like diabetes prediction.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
