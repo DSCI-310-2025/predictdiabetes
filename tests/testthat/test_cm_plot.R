@@ -56,6 +56,17 @@ test_that("cm_plot creates a correct plot for multiple classes", {
 })
 
 
+
+test_that("function stops if the directory doesn't exist", {
+  fake_output_path <- "/path/to/nonexistent/directory/plot.pdf"
+  conf_matrix_df <- data.frame(
+    Prediction = c("A", "B", "A", "B"),
+    Truth = c("A", "B", "B", "A"),
+    Freq = c(5, 10, 15, 20)
+  )
+  expect_error(cm_plot(conf_matrix_df, fake_output_path), "could not create file")
+})
+
 test_that("cm_plot handles empty data frame gracefully", {
 
   empty_df <- data.frame(
