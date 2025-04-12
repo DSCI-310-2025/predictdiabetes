@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>PredictDiabetes Vignette: Classification with Iris Dataset • predictdiabetes</title>
+<title>predictdiabetes Vignette: Classification with Iris Dataset • predictdiabetes</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="PredictDiabetes Vignette: Classification with Iris Dataset">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="predictdiabetes Vignette: Classification with Iris Dataset">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/predictdiabetes-vignette.html">PredictDiabetes Vignette: Classification with Iris Dataset</a></li>
+<li><a class="dropdown-item" href="../articles/predictdiabetes-vignette.html">predictdiabetes Vignette: Classification with Iris Dataset</a></li>
   </ul>
 </li>
       </ul>
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>PredictDiabetes Vignette: Classification with Iris Dataset</h1>
+      <h1>predictdiabetes Vignette: Classification with Iris Dataset</h1>
             
       
 
@@ -102,7 +102,7 @@ introduced synthetic data to increase the sample size.</p>
 <span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
 <span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">train_data</span>, n<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">train_data</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Noise1   Noise2</span></span>
 <span><span class="co">#&gt; 1         High      Medium       Medium      Medium   other    Red Triangle</span></span>
 <span><span class="co">#&gt; 2          Low         Low       Medium      Medium   other    Red   Square</span></span>
@@ -166,7 +166,8 @@ target.</p>
 <span></span>
 <span><span class="co"># Display plots in a 2x2 grid</span></span>
 <span><span class="fu"><a href="../reference/plots_grid.html">plots_grid</a></span><span class="op">(</span><span class="va">bar_plots</span>, num_cols <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-9-1.png" width="672"><em>Key Insight</em>: Petal.Length and Petal.Width has a better
+<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<p><em>Key Insight</em>: Petal.Length and Petal.Width has a better
 separation between classes (potential strong predictors) compare to
 other variables.</p>
 </div>
@@ -217,7 +218,7 @@ variable. Noise2 contributes very little to the prediction task,
 suggesting it should be dropped from the model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># drop Noise2 as it contribute to the model very little</span></span>
-<span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="va">train_data</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="va">train_data</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">Noise2</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -258,7 +259,7 @@ respectively.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lasso_modelOutputs</span> <span class="op">&lt;-</span> <span class="va">test_data</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">model_workflow</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">model_workflow</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span>,</span>
 <span>        <span class="va">model_workflow</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">test_data</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -291,14 +292,14 @@ curve using <code><a href="../reference/roc_plot.html">roc_plot()</a></code></p>
 <span>  event_level <span class="op">=</span> <span class="st">"second"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">plot_path1</span> <span class="op">&lt;-</span> <span class="st">"../man/figures/VIGNETTE-rocplot.png"</span></span>
+<span><span class="va">plot_path1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">roc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roc_plot.html">roc_plot</a></span><span class="op">(</span>model_outputs <span class="op">=</span> <span class="va">lasso_modelOutputs</span>,</span>
-<span>         true_class <span class="op">=</span> <span class="st">"Species"</span>,</span>
-<span>         predicted_probs <span class="op">=</span> <span class="st">".pred_setosa"</span>,</span>
-<span>         roc_auc_value <span class="op">=</span> <span class="va">roc_metric</span><span class="op">$</span><span class="va">.estimate</span>,</span>
-<span>         output_path <span class="op">=</span> <span class="va">plot_path1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/VIGNETTE-rocplot.png" width="60%" style="display: block; margin: auto;"><em>Interpretation</em>: We can see from the plot that our model
+<span>                     true_class <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>                     predicted_probs <span class="op">=</span> <span class="st">".pred_setosa"</span>,</span>
+<span>                     roc_auc_value <span class="op">=</span> <span class="va">roc_metric</span><span class="op">$</span><span class="va">.estimate</span>,</span>
+<span>                     output_path <span class="op">=</span> <span class="va">plot_path1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;"><em>Interpretation</em>: We can see from the plot that our model
 achieved an AUC of 0.745, which is fairly modest. This result is
 expected since we intentionally added noise to the dataset and the
 dataset is still relatively small.</p>
@@ -310,12 +311,13 @@ performance:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Confusion matrix</span></span>
 <span></span>
-<span><span class="va">plot_path2</span> <span class="op">&lt;-</span> <span class="st">"../man/figures/VIGNETTE-cmplot.png"</span></span>
+<span><span class="va">plot_path2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cm_df</span> <span class="op">&lt;-</span> <span class="fu">conf_mat</span><span class="op">(</span><span class="va">lasso_modelOutputs</span>, truth <span class="op">=</span> <span class="va">Species</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span><span class="op">$</span><span class="va">table</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/cm_plot.html">cm_plot</a></span><span class="op">(</span><span class="va">plot_path2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/VIGNETTE-cmplot.png" width="60%" style="display: block; margin: auto;"><em>Interpretation</em>: The confusion matrix shows that the model
+<p><img src="predictdiabetes-vignette_files/figure-html/unnamed-chunk-19-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><em>Interpretation</em>: The confusion matrix shows that the model
 correctly classified 26 setosa and 60 other samples, but also
 misclassified 26 setosa as other and 14 other as setosa. This indicates
 that the model struggles with distinguishing setosa from other,

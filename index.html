@@ -35,7 +35,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/predictdiabetes-vignette.html">PredictDiabetes Vignette: Classification with Iris Dataset</a></li>
+<li><a class="dropdown-item" href="articles/predictdiabetes-vignette.html">predictdiabetes Vignette: Classification with Iris Dataset</a></li>
   </ul>
 </li>
       </ul>
@@ -64,26 +64,16 @@
 <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
 </h2>
 <ul>
-<li>
-<code>na_count_type</code>: Given an input data frame, check for the number of missing values (NA), the number of distinct values, and the data type of each variable.</li>
-<li>
-<code>category_target</code>: Given an input dataframe with a categorical variable, return the number and proportion of instances with each category value, in alphabetical (for characters and logical) or numerical (for integers) order</li>
-<li>
-<code>categorical_bars</code>: Create a list of bar plots for each categorical variable in a data frame.</li>
-<li>
-<code>info_gain</code>: Calculate and sort information gain for feature selection.</li>
-<li>
-<code>plots_grid</code>: Combine a list or mulitple lists of <code>ggplot2</code> objects into a single grid layout using <code>patchwork</code>. The number of columns in the grid can be specified with <code>num_cols</code>.</li>
-<li>
-<code>cramer_chi_results</code>: Runs chi-squared tests and calculates Cramer’s V independently for each variable in a given data frame.</li>
-<li>
-<code>lr_pipeline</code>: Trains and fits a logistic regression model and cross-validates for optimal hyperparameter values.</li>
-<li>
-<code>roc_plot</code>: Creates an ROC curve plot and saves it to the specified file path.</li>
-<li>
-<code>cm_plot</code>: Creates a confusion matrix plot and saves it to the specified file path.</li>
-<li>
-<code>coeff_plot</code>: Plot LASSO classification model coefficients.</li>
+<li><p><code>na_count_type</code>: Given an input data frame, check for the number of missing values (NA), the number of distinct values, and the data type of each variable.</p></li>
+<li><p><code>category_target</code>: Given an input dataframe with a categorical variable, return the number and proportion of instances with each category value, in alphabetical (for characters and logical) or numerical (for integers) order</p></li>
+<li><p><code>categorical_bars</code>: Create a list of bar plots for each categorical variable in a data frame.</p></li>
+<li><p><code>info_gain</code>: Calculate and sort information gain for feature selection.</p></li>
+<li><p><code>plots_grid</code>: Combine a list or mulitple lists of <code>ggplot2</code> objects into a single grid layout using <code>patchwork</code>. The number of columns in the grid can be specified with <code>num_cols</code>.</p></li>
+<li><p><code>cramer_chi_results</code>: Runs chi-squared tests and calculates Cramer’s V independently for each variable in a given data frame.</p></li>
+<li><p><code>lr_pipeline</code>: Trains and fits a logistic regression model and cross-validates for optimal hyperparameter values.</p></li>
+<li><p><code>roc_plot</code>: Creates an ROC curve plot and saves it to the specified file path.</p></li>
+<li><p><code>cm_plot</code>: Creates a confusion matrix plot and saves it to the specified file path.</p></li>
+<li><p><code>coeff_plot</code>: Plot LASSO classification model coefficients.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -102,14 +92,14 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dsci-310-2025.github.io/predictdiabetes/">predictdiabetes</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/na_count_type.html">na_count_type</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   mpg      cyl      disp     hp       drat     wt      </span></span>
-<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     </span></span>
-<span><span class="co">#&gt; Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    </span></span>
-<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double" "double"</span></span>
-<span><span class="co">#&gt;                   qsec     vs       am       gear     carb    </span></span>
-<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"     </span></span>
-<span><span class="co">#&gt; Distinct_Count    "30"     "2"      "2"      "3"      "6"     </span></span>
-<span><span class="co">#&gt; Current_Data_Type "double" "double" "double" "double" "double"</span></span>
+<span><span class="co">#&gt;                   mpg      cyl       disp     hp       drat     wt      </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"       "0"      "0"      "0"      "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "25"     "3"       "27"     "22"     "22"     "29"    </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "integer" "double" "double" "double" "double"</span></span>
+<span><span class="co">#&gt;                   qsec     vs       am        gear      carb    </span></span>
+<span><span class="co">#&gt; NA_Count          "0"      "0"      "0"       "0"       "0"     </span></span>
+<span><span class="co">#&gt; Distinct_Count    "30"     "2"      "2"       "3"       "6"     </span></span>
+<span><span class="co">#&gt; Current_Data_Type "double" "double" "integer" "integer" "double"</span></span>
 <span><span class="co">#&gt;                   mpg      cyl      disp     hp       drat     wt      </span></span>
 <span><span class="co">#&gt; NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     </span></span>
 <span><span class="co">#&gt; Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    </span></span>
@@ -140,22 +130,15 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Diabetes_binary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  .pred_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">conf_matrix_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Prediction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Positive"</span>, <span class="st">"Negative"</span>, <span class="st">"Positive"</span>, <span class="st">"Negative"</span><span class="op">)</span>,</span>
+<span>  Truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Positive"</span>, <span class="st">"Positive"</span>, <span class="st">"Negative"</span>, <span class="st">"Negative"</span><span class="op">)</span>,</span>
+<span>  Freq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span>, <span class="fl">5</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cm_plot.html">cm_plot</a></span><span class="op">(</span><span class="va">conf_matrix_df</span>, <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">output_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/roc_plot.html">roc_plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">test_data</span>,</span>
-<span>  <span class="st">"Diabetes_binary"</span>,</span>
-<span>  <span class="st">".pred_1"</span>,</span>
-<span>  <span class="fl">0.85</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".png"</span><span class="op">)</span>  <span class="co"># This doesn't create an actual file</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Saving 7 x 7 in image</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">output_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-output_plot-1.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-cm_plot-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
