@@ -79,3 +79,18 @@ test_that("cramer_chi_results handles dataframe with no rows correctly", {
                          "Insufficient data: the dataframe is empty.")
 })
 
+
+test_that("function stops if categorical_vars is not a character vector", {
+  non_character_categorical_vars <- 123  # Not a character vector
+
+  expect_error(cramer_chi_results(df, non_character_categorical_vars, "mpg"),
+               "categorical_vars must be a character vector of column names.")
+})
+
+test_that("function stops if categorical_vars are not in the dataframe", {
+  invalid_categorical_vars <- c("cyl", "nonexistent_col")  # 'nonexistent_col' doesn't exist in df
+
+  expect_error(cramer_chi_results(df, invalid_categorical_vars, "mpg"),
+               "The following variables are not present in the dataframe: cyl, nonexistent_col")
+})
+
