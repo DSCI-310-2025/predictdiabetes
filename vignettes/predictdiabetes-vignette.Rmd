@@ -14,51 +14,143 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r warnings=FALSE, message=FALSE}
 library(predictdiabetes)
+
+# Additional supporting packages used below
+library(glmnet)
+library(dplyr)
+library(rsample)
+library(recipes)
+library(parsnip)
+library(workflows)
+library(yardstick)
 ```
 
 
-## Generate Plots
+# Introduction
+The predictdiabetes package provides a collection of utility functions that support classification tasks, including data visualization, feature importance ranking, model evaluation, and pipeline creation using logistic regression. This vignette walks through the main functionalities of the package using the classic mtcars dataset as a demonstration, with am (transmission type) serving as a proxy target variable, and cyl, gear, and carb as potential predictors.
 
+```{r warnings=FALSE, message=FALSE}
+# Subset mtcars to select the desired columns and convert them to factors
+mtcars <- mtcars %>%
+  select(cyl, gear, carb, am) %>%    # Select only the 'cyl', 'gear', 'carb', and 'am' columns
+  mutate(across(everything(), as.factor))  # Convert all selected columns to factors
+
+
+# split into test and training set
+set.seed(10)
+df_split <- rsample::initial_split(mtcars, prop = 0.75, strata = am)
+df_train <- rsample::training(df_split)
+df_test <- rsample::testing(df_split)
+
+head(df_train)
+```
+
+
+## Functions to help with EDA
+
+### Category Counts and Proportions
+Use `category_target()` to summarize category distribution for any categorical column.
+```{r warnings=FALSE, message=FALSE}
+target_result <- category_target(df_train, am)
+target_result
+```
+From this, we can tell that the dataset is quite balance for the am variable.
+
+
+### NA Summary
+Use `na_count_type()` to summarize missing values and data types.
+```{r warnings=FALSE, message=FALSE}
+# Check for NAs and data types
+na_summary <- na_count_type(df_train)
+na_summary
+```
+From this, we can tell that there are no NA values. Yay!
+
+### Bar Plots of Categorical Variables
+The `categorical_bars()` function generates a bar plot list of categorical variables grouped by a binary target.
 ```{r, fig.width=7, fig.height=5}
-## Generate Bar Plots Using mtcars
-# First, convert variables to factors since mtcars stores them as numeric
-mtcars$cyl <- as.factor(mtcars$cyl)
-mtcars$gear <- as.factor(mtcars$gear)
-mtcars$am   <- as.factor(mtcars$am)
 
-bar_plots <- categorical_bars(
-  data_frame = mtcars,
-  cat_vars = c("cyl", "gear"),
+# Generate bar plots for 'cyl' and 'gear' by transmission type
+bar_plots_list <- categorical_bars(
+  data_frame = df_train,
+  cat_vars = c("cyl", "gear", "carb"),
   target_col = "am",
-  title_size = 15,
-  axis_size = 20
+  title_size = 12, axis_size = 12,
+  legend_key_size = 1,
+  legend_text_size = 12,
+  legend_title_size = 12
 )
 
-## Display one of the bar plots, e.g., for cyl:
-(bar_plots[["cyl"]])
+# Display one of the generated bar plots
+bar_plots_list[["cyl"]]
+
 ```
 
 
-```{r}
-# Convert existing variables to factors.
-mtcars$cyl <- as.factor(mtcars$cyl)
-mtcars$gear <- as.factor(mtcars$gear)
-
-# Create a binary categorical variable from 'mpg':
-# 'High' if mpg is at or above the median, and 'Low' otherwise.
-mtcars$mpg_cat <- ifelse(mtcars$mpg >= median(mtcars$mpg), "High", "Low")
-mtcars$mpg_cat <- as.factor(mtcars$mpg_cat)
+### Plotting Multiple Bar Charts in a Grid
+Combine multiple bar plots into a grid layout using `plot_grid()` using the generated bar list from `categorical_bars` together
+```{r warnings=FALSE, message=FALSE}
+# Generate bar plots for categorical variables
+plots_grid(bar_plots_list, num_cols = 3)
 ```
 
-```{r}
+
+### Cramér’s V and Chi-squared Association Test
+Use `cramer_chi_results()` to compute associations between categorical variables and a binary target.
+```{r warning=FALSE}
+# target var
+df_train$am <- as.factor(df_train$am)
+
+# Run chi-squared and Cramér’s V tests
 chi_results <- cramer_chi_results(
-  df = mtcars, 
-  categorical_vars = c("cyl", "gear"), 
-  target_col = "mpg_cat"
+  df = df_train, 
+  categorical_vars = c("cyl", "gear", "carb"), 
+  target_col = "am"
 )
 
-# Display the resulting summary table.
+# View the results
 chi_results
 ```
+Based on the cramer V result, gear has a very strong, statistically significant association with am. cyl has a moderate, statistically significant association with am. carb has a moderate association, but it is not statistically significant.
+
+### Feature Importance via Information Gain
+Identify the most informative predictors using `info_gain()`.
+```{r warnings=FALSE, message=FALSE}
+# Compute information gain with respect to 'am'
+info_gain_table <- info_gain(df_train, am ~ cyl + gear + carb)
+
+# View sorted features
+info_gain_table
+```
+Based on the information gain result, gear provide the most information about `am`. cyl  variable provides some information, but less than gear. While it does contribute to the prediction, it’s not as strong a predictor of am as gear. Carb  provides no useful information for predicting am. Thus we will drop carb variable.
+
+```{r warnings=FALSE, message=FALSE}
+df_train <- df_train %>% select(-carb)
+```
+
+
+## Function to Help with Modeling
+
+The `lr_pipeline()` function automates logistic regression training, tuning, and model saving.
+```{r warnings=FALSE, message=FALSE}
+lasso_tuned_wflow <- lr_pipeline(df_train, "am", 5, 10, "recall", tempfile(fileext = ".rds"))
+lasso_tuned_wflow
+```
+
+
+## Apply Model To Test Set
+Now we got our model, we will apply it to our test set.
+```{r warnings=FALSE, message=FALSE}
+lasso_modelOutputs <- df_test %>%
+  cbind(lasso_tuned_wflow %>% predict(df_test), 
+        lasso_tuned_wflow %>% predict(df_test, type = "prob"))
+
+lasso_modelOutputs
+```
+
+
+# Conclusion
+The `predictdiabetes` package simplifies many common tasks in binary classification, from visualization and data preprocessing to model training and evaluation. We demonstrated its use with the `mtcars` dataset, but it is fully extensible to real-world classification problems like diabetes prediction.
+
