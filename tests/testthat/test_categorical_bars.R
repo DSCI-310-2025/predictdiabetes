@@ -34,7 +34,7 @@ test_that("categorical_bars plot titles and axis labels are correct", {
     target_col = "target"
   )
 
-  expect_true(grepl("Diabetes Binary by v1", result[["v1"]]$labels$title))
+  expect_true(grepl("target by v1", result[["v1"]]$labels$title))
 
   # Check axis labels
   expect_equal(result[["v1"]]$labels$x, "v1")
@@ -102,3 +102,4 @@ test_that("Check if cat_vars is specified", {
     "Categorical variables must be specified."
   )
 })
+
