@@ -15,7 +15,20 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+remove.packages("predictdiabetes")
+packages_to_remove <- c(
+  "tidymodels", "rsample", "recipes", "parsnip", "workflows",
+  "broom", "glmnet", "dplyr", "ggplot2", "devtools",
+  "FSelectorRcpp", "tidyverse"
+)
+
+remove.packages(packages_to_remove)
+
+devtools::install_github("DSCI-310-2025/predictdiabetes")
+install.packages("glmnet")
+library(glmnet)
 library(predictdiabetes)
+library(dplyr)
 ```
 
 
@@ -61,4 +74,189 @@ chi_results <- cramer_chi_results(
 
 # Display the resulting summary table.
 chi_results
+```
+
+
+### Category_target
+
+# View category counts and proportions for the 'cyl' column in mtcars
+
+```{r}
+
+# Compute count and proportion of each category in a factor variable
+
+# Convert 'cyl' and 'gear' to factor if not already
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+
+# Generate counts and proportions for 'cyl'
+category_summary <- category_target(
+  data_frame = mtcars,
+  cat_var = cyl
+)
+
+# Display the summary
+category_summary
+
+# You can also try it on other categorical variables, e.g., 'gear'
+category_target(mtcars, gear)
+
+```
+```{r}
+# Create a toy confusion matrix data frame
+conf_matrix_df <- data.frame(
+  Prediction = c("Positive", "Negative", "Positive", "Negative"),
+  Truth = c("Positive", "Positive", "Negative", "Negative"),
+  Freq = c(45, 5, 10, 40)
+)
+
+# Define a temporary file path to save the confusion matrix plot
+# (You can change this to a permanent location if needed)
+temp_output_path <- tempfile(fileext = ".png")
+
+# Create and save the confusion matrix plot
+conf_matrix_plot <- cm_plot(conf_matrix_df, temp_output_path)
+
+# Display the plot in the vignette
+conf_matrix_plot
+```
+
+
+
+
+
+
+
+```{r}
+# Prepare dataset
+# Convert 'am' to factor for classification task
+mtcars$am <- as.factor(mtcars$am)
+
+# Calculate and sort information gain
+info_gain_table <- info_gain(mtcars, am ~ .)
+
+# Display top features by information gain
+info_gain_table
+
+
+```
+
+
+
+```{r}
+# Prepare data
+data(mtcars)
+mtcars$am <- as.factor(mtcars$am)
+
+set.seed(123)
+split <- rsample::initial_split(mtcars, prop = 0.8, strata = am)
+train_data <- rsample::training(split)
+
+# Build recipe and model
+rec <- recipes::recipe(am ~ ., data = train_data)
+
+lasso_spec <- parsnip::logistic_reg(penalty = 0.1, mixture = 1) %>% 
+  parsnip::set_engine("glmnet")
+
+# Build and fit workflow
+wf <- workflows::workflow() %>%
+  workflows::add_recipe(rec) %>%
+  workflows::add_model(lasso_spec) %>%
+  workflows::fit(data = train_data)
+
+# Now run your function
+coeff_plot(wf)
+
+```
+
+```{r}
+# Prepare the data
+data(mtcars)
+mtcars$am <- as.factor(mtcars$am)
+
+# Set up output path for model (temporarily for vignette)
+temp_model_path <- tempfile(fileext = ".rds")
+
+# Run the logistic regression pipeline
+final_lr_model <- lr_pipeline(
+  data = mtcars,
+  target_col = "am",
+  vfolds = 5,
+  grid_size = 5,
+  tuning_metric = "recall",
+  output_path = temp_model_path
+)
+final_lr_model
+
+```
+
+```{r}
+# Summarize NA count, distinct values, and data types for each column in mtcars
+na_summary <- na_count_type(mtcars)
+
+# Display the summary
+na_summary
+
+```
+```{r}
+# Convert variables to factors for plotting
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+mtcars$am <- as.factor(mtcars$am)
+
+# Generate bar plots using categorical_bars
+bar_plots_list <- categorical_bars(
+  data_frame = mtcars,
+  cat_vars = c("cyl", "gear"),
+  target_col = "am"
+)
+
+# Combine the bar plots into a grid layout with 2 columns
+grid_output <- plots_grid(bar_plots_list, num_cols = 2)
+
+# Display the combined grid of plots
+grid_output
+
+```
+
+```{r}
+# Prepare mock prediction output
+# Convert target variable to factor for classification
+mtcars$am <- as.factor(mtcars$am)
+
+# Split data
+set.seed(123)
+split <- rsample::initial_split(mtcars, prop = 0.8, strata = am)
+train <- rsample::training(split)
+test <- rsample::testing(split)
+
+# Train a simple logistic regression model
+model <- glm(am ~ mpg + hp, data = train, family = "binomial")
+
+# Get predicted probabilities on test set
+test$.pred_1 <- predict(model, newdata = test, type = "response")
+test$am <- factor(test$am, levels = c("0", "1"))  # Ensure correct order for yardstick
+
+# Compute AUC
+roc_metrics <- yardstick::roc_auc(test, truth = am, .pred_1, event_level = "second")
+roc_auc_value <- roc_metrics$.estimate
+
+```
+
+```{r}
+# Define temporary output path for saving the ROC plot
+temp_roc_path <- tempfile(fileext = ".png")
+
+# Create and save the ROC curve plot
+roc_curve_plot <- roc_plot(
+  model_outputs = test,
+  true_class = "am",
+  predicted_probs = ".pred_1",
+  roc_auc_value = roc_auc_value,
+  output_path = temp_roc_path
+)
+
+# Display the plot inline
+roc_curve_plot
+
 ```
