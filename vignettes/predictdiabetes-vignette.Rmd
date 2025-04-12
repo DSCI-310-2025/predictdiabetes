@@ -1,5 +1,5 @@
 ---
-title: "PredictDiabetes Vignette: Classification with Iris Dataset"
+title: "predictdiabetes Vignette: Classification with Iris Dataset"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{predictdiabetes-vignette}
@@ -100,7 +100,7 @@ split <- initial_split(iris_processed, prop = 0.75, strata = "Species")
 train_data <- training(split)
 test_data <- testing(split)
 
-head(train_data, n=3)
+head(train_data, n = 3)
 ```
 
 
@@ -137,6 +137,7 @@ bar_plots <- categorical_bars(
 # Display plots in a 2x2 grid
 plots_grid(bar_plots, num_cols = 2)
 ```
+
 *Key Insight*: Petal.Length and Petal.Width has a better separation between classes (potential strong predictors) compare to other variables.
 
 
@@ -162,7 +163,7 @@ info_gain(train_data, Species ~ Sepal.Length + Sepal.Width + Petal.Length + Peta
 
 ```{r}
 # drop Noise2 as it contribute to the model very little
-train_data <- train_data %>% 
+train_data <- train_data %>%
   select(-Noise2)
 ```
 
@@ -196,7 +197,7 @@ Generate predictions and probabilities on the test set:
 ```{r warnings=FALSE, message=FALSE}
 lasso_modelOutputs <- test_data %>%
   mutate(across(everything(), as.factor)) %>%
-  cbind(model_workflow %>% predict(test_data), 
+  cbind(model_workflow %>% predict(test_data),
         model_workflow %>% predict(test_data, type = "prob")) %>%
   mutate(Species = as.factor(Species))
 
@@ -217,14 +218,14 @@ roc_metric <- roc_auc(
 plot_path1 <- tempfile(fileext = ".png")
 
 roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
-         true_class = "Species",
-         predicted_probs = ".pred_setosa",
-         roc_auc_value = roc_metric$.estimate,
-         output_path = plot_path1)
+                     true_class = "Species",
+                     predicted_probs = ".pred_setosa",
+                     roc_auc_value = roc_metric$.estimate,
+                     output_path = plot_path1)
 ```
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
-knitr::include_graphics(plot_path1)
+roc_plot
 ```
 *Interpretation*: We can see from the plot that our model achieved an AUC of 0.745, which is fairly modest. This result is expected since we intentionally added noise to the dataset and the dataset is still relatively small.
 
@@ -242,8 +243,9 @@ cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, e
 ```
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
-knitr::include_graphics(plot_path2)
+cm_df
 ```
+
 *Interpretation*: The confusion matrix shows that the model correctly classified 26 setosa and 60 other samples, but also misclassified 26 setosa as other and 14 other as setosa. This indicates that the model struggles with distinguishing setosa from other, particularly overpredicting the other class.
 
 

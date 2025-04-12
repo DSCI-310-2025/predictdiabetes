@@ -32,7 +32,9 @@ The goal of `predictdiabetes` is to provide functions that are useful for develo
 - `info_gain`: Calculate and sort information gain for feature selection.
 - `plots_grid`: Combine a list or mulitple lists of `ggplot2` objects into a single grid layout using `patchwork`. The number of columns in the grid can be specified with `num_cols`.
 - `cramer_chi_results`: Runs chi-squared tests and calculates Cramer's V independently for each variable in a given data frame.
+
 - `lr_pipeline`: Trains and fits a logistic regression model and cross-validates for optimal  hyperparameter values.
+
 - `roc_plot`: Creates an ROC curve plot and saves it to the specified file path.
 - `cm_plot`: Creates a confusion matrix plot and saves it to the specified file path.
 - `coeff_plot`: Plot LASSO classification model coefficients.
@@ -86,25 +88,16 @@ bar_plots <- categorical_bars(
 
 After building the LASSO model, ROC plots would be beneficial to evaluate how your model would perform.
 
-```{r roc_plot}
+```{r cm_plot}
 set.seed(42)
 
-test_data <- data.frame(
-  Diabetes_binary = factor(sample(c(0, 1), 100, replace = TRUE)),
-  .pred_1 = runif(100)
+conf_matrix_df <- data.frame(
+  Prediction = c("Positive", "Negative", "Positive", "Negative"),
+  Truth = c("Positive", "Positive", "Negative", "Negative"),
+  Freq = c(50, 10, 5, 100)
 )
+plot <- cm_plot(conf_matrix_df, tempfile(fileext = ".png"))
 
-output_plot <- roc_plot(
-  test_data,
-  "Diabetes_binary",
-  ".pred_1",
-  0.85,
-  tempfile(fileext = ".png")  # This doesn't create an actual file
-)
-
-plot(output_plot)
+plot(plot)
 ```
 
-```{r echo=FALSE}
-knitr::include_graphics("man/figures/README-output_plot-1.png")
-```
