@@ -100,7 +100,7 @@ split <- initial_split(iris_processed, prop = 0.75, strata = "Species")
 train_data <- training(split)
 test_data <- testing(split)
 
-head(train_data, n=3)
+head(train_data, n = 3)
 ```
 
 
@@ -163,7 +163,7 @@ info_gain(train_data, Species ~ Sepal.Length + Sepal.Width + Petal.Length + Peta
 
 ```{r}
 # drop Noise2 as it contribute to the model very little
-train_data <- train_data %>% 
+train_data <- train_data %>%
   select(-Noise2)
 ```
 
@@ -215,7 +215,7 @@ roc_metric <- roc_auc(
   event_level = "second"
 )
 
-plot_path1 <- "../reference/figures/VIGNETTE-rocplot.png"
+plot_path1 <- "../man/figures/VIGNETTE-rocplot.png"
 
 roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
                      true_class = "Species",
@@ -226,6 +226,7 @@ roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
 knitr::include_graphics(plot_path1)
+roc_plot
 ```
 *Interpretation*: We can see from the plot that our model achieved an AUC of 0.745, which is fairly modest. This result is expected since we intentionally added noise to the dataset and the dataset is still relatively small.
 
@@ -235,7 +236,7 @@ Plot the confusion matrix using `cm_plot()` assess model performance:
 ```{r fig.width=7, warning=FALSE, fig.width=7, fig.height=5}
 # Confusion matrix
 
-plot_path2 <- "../reference/figures/VIGNETTE-cmplot.png"
+plot_path2 <- "../man/figures/VIGNETTE-cmplot.png"
 
 cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, event_level = "second")$table |> 
   as.data.frame() %>%
@@ -244,6 +245,7 @@ cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, e
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
 knitr::include_graphics(plot_path2)
+cm_df
 ```
 
 *Interpretation*: The confusion matrix shows that the model correctly classified 26 setosa and 60 other samples, but also misclassified 26 setosa as other and 14 other as setosa. This indicates that the model struggles with distinguishing setosa from other, particularly overpredicting the other class.
