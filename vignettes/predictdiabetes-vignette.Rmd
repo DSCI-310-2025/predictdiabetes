@@ -1,5 +1,5 @@
 ---
-title: "predictdiabetes-vignette"
+title: "PredictDiabetes Vignette: Classification with Iris Dataset"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{predictdiabetes-vignette}
@@ -16,7 +16,9 @@ knitr::opts_chunk$set(
 
 ```{r warnings=FALSE, message=FALSE}
 library(predictdiabetes)
+```
 
+```{r echo=FALSE, warnings=FALSE, message=FALSE}
 # Additional supporting packages used below
 library(glmnet)
 library(dplyr)
@@ -27,130 +29,225 @@ library(workflows)
 library(yardstick)
 ```
 
-
 # Introduction
-The predictdiabetes package provides a collection of utility functions that support classification tasks, including data visualization, feature importance ranking, model evaluation, and pipeline creation using logistic regression. This vignette walks through the main functionalities of the package using the classic mtcars dataset as a demonstration, with am (transmission type) serving as a proxy target variable, and cyl, gear, and carb as potential predictors.
-
-```{r warnings=FALSE, message=FALSE}
-# Subset mtcars to select the desired columns and convert them to factors
-mtcars <- mtcars %>%
-  select(cyl, gear, carb, am) %>%    # Select only the 'cyl', 'gear', 'carb', and 'am' columns
-  mutate(across(everything(), as.factor))  # Convert all selected columns to factors
+The predictdiabetes package provides tools for binary classification tasks, including:
+- Exploratory Data Analysis (EDA): Visualizations and statistical tests
+- Feature Selection: Identifying important predictors
+- Modeling: Logistic regression pipeline with automated tuning
 
 
-# split into test and training set
-set.seed(10)
-df_split <- rsample::initial_split(mtcars, prop = 0.75, strata = am)
-df_train <- rsample::training(df_split)
-df_test <- rsample::testing(df_split)
+This vignette demonstrates the workflow using the iris dataset, where we:
+1.Convert Sepal.Length, Sepal.Width, Petal.Length, and Petal.Width into categorical predictors, and add some noise into the dataset (Noise1 and Noise2) so we won't have perfect metrics (since our dataset is quite small).
+2. Use Species as a binary target (setosa vs. others)
 
-head(df_train)
+
+## Data Preparation
+
+Firstly, we modified the original iris dataset behind the scenes: we transformed the numeric predictors into categorical values and added some noise to make the task more challenging. Additionally, we introduced synthetic data to increase the sample size.
+```{r echo=FALSE}
+# do the transformation the background, not relevant to analysis
+
+set.seed(123)
+
+# Step 1–3: Bin numeric features, convert to factor, add noise, add light randomness
+iris_processed <- iris %>%
+  mutate(across(
+    .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+    ~ cut(.x, breaks = 3, labels = c("Low", "Medium", "High"))
+  )) %>%
+  mutate(
+    Species = ifelse(Species == "setosa", "setosa", "other"),
+    Noise1 = sample(c("Red", "Green", "Blue"), n(), replace = TRUE),
+    Noise2 = sample(c("Circle", "Square", "Triangle"), n(), replace = TRUE)
+  ) %>%
+  mutate(across(everything(), as.factor)) %>%
+  mutate(across(
+    .cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+    ~ ifelse(runif(n()) > 1, sample(levels(.x), 1), as.character(.x))
+  )) %>%
+  mutate(across(everything(), as.factor))
+
+# Step 4–5: Create synthetic rows with random values
+levels_list <- lapply(iris_processed[c(1:4)], levels)
+n_extra <- 350  # Adjust this to add 350 synthetic rows to reach 500 total rows
+
+iris_extra <- tibble(
+  Sepal.Length = sample(levels_list[[1]], n_extra, replace = TRUE),
+  Sepal.Width  = sample(levels_list[[2]], n_extra, replace = TRUE),
+  Petal.Length = sample(levels_list[[3]], n_extra, replace = TRUE),
+  Petal.Width  = sample(levels_list[[4]], n_extra, replace = TRUE),
+  Species      = sample(levels(iris_processed$Species), n_extra, replace = TRUE),
+  Noise1       = sample(c("Red", "Green", "Blue"), n_extra, replace = TRUE),
+  Noise2       = sample(c("Circle", "Square", "Triangle"), n_extra, replace = TRUE)
+) %>%
+  mutate(across(everything(), as.factor))
+
+# Step 6: Combine original and synthetic data
+iris_processed <- bind_rows(iris_processed, iris_extra)
+```
+
+Lets get a glipse of the processed iris dataframe.
+```{r}
+# head of the transformed iris dataset we will play with that has also been upsampled.
+head(iris_processed, n = 5)
+```
+
+Next, lets split the dataframe into training and test set.
+```{r}
+# Split into training (75%) and testing (25%) sets
+set.seed(123)
+split <- initial_split(iris_processed, prop = 0.75, strata = "Species")
+train_data <- training(split)
+test_data <- testing(split)
+
+head(train_data, n=3)
 ```
 
 
-## Functions to help with EDA
+## Exploratory Data Analysis (EDA)
 
-### Category Counts and Proportions
-Use `category_target()` to summarize category distribution for any categorical column.
-```{r warnings=FALSE, message=FALSE}
-target_result <- category_target(df_train, am)
-target_result
+### 1. Target Variable Distribution
+Check the distribution of the binary target variable (Species) using `category_target()` to assess any class imbalance.
+```{r}
+category_target(train_data, Species)
 ```
-From this, we can tell that the dataset is quite balance for the am variable.
+*Interpretation*: We will use the rule of thumb that a dataset is considered imbalanced when the minority class represents less than 10–20% of the data. Based on this, our dataset is only slightly imbalanced (45% Setosa, 54% other). We will proceed with this slightly imbalanced dataset without applying any balancing techniques.
 
 
-### NA Summary
-Use `na_count_type()` to summarize missing values and data types.
+### 2. NA Summary
+Use `na_count_type()` to identify missing values and data types.
 ```{r warnings=FALSE, message=FALSE}
-# Check for NAs and data types
-na_summary <- na_count_type(df_train)
-na_summary
+na_count_type(train_data)
 ```
-From this, we can tell that there are no NA values. Yay!
+*Interpretation*: No missing values detected for all columns. Yay! No need to drop any rows.
 
-### Bar Plots of Categorical Variables
-The `categorical_bars()` function generates a bar plot list of categorical variables grouped by a binary target.
-```{r, fig.width=7, fig.height=5}
 
-# Generate bar plots for 'cyl' and 'gear' by transmission type
-bar_plots_list <- categorical_bars(
-  data_frame = df_train,
-  cat_vars = c("cyl", "gear", "carb"),
-  target_col = "am",
-  title_size = 12, axis_size = 12,
-  legend_key_size = 1,
-  legend_text_size = 12,
-  legend_title_size = 12
+### 3. Bar Plots of Predictors vs. Target
+`categorical_bars()` and `plot_grid()` together makes it easy to visualize the relationship between the predictor to it's target variable. In this case, `species` is our target.
+```{r fig.width=7, fig.height=5}
+# this create a list of bar_plots
+bar_plots <- categorical_bars(
+  data_frame = train_data,
+  cat_vars = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Noise1", "Noise2"),
+  target_col = "Species",
+  title_size = 12,
+  axis_size = 10
 )
 
-# Display one of the generated bar plots
-bar_plots_list[["cyl"]]
-
+# Display plots in a 2x2 grid
+plots_grid(bar_plots, num_cols = 2)
 ```
+*Key Insight*: Petal.Length and Petal.Width has a better separation between classes (potential strong predictors) compare to other variables.
 
 
-### Plotting Multiple Bar Charts in a Grid
-Combine multiple bar plots into a grid layout using `plot_grid()` using the generated bar list from `categorical_bars` together
-```{r warnings=FALSE, message=FALSE}
-# Generate bar plots for categorical variables
-plots_grid(bar_plots_list, num_cols = 3)
-```
-
-
-### Cramér’s V and Chi-squared Association Test
-Use `cramer_chi_results()` to compute associations between categorical variables and a binary target.
+### 4. Statistical Association Tests
+Use `cramer_chi_results()` to compute Cramér’s V and chi-squared p-values to quantify predictor-target relationships
 ```{r warning=FALSE}
-# target var
-df_train$am <- as.factor(df_train$am)
-
-# Run chi-squared and Cramér’s V tests
-chi_results <- cramer_chi_results(
-  df = df_train, 
-  categorical_vars = c("cyl", "gear", "carb"), 
-  target_col = "am"
+cramer_chi_results(
+  df = train_data,
+  categorical_vars = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Noise1", "Noise2"),
+  target_col = "Species"
 )
-
-# View the results
-chi_results
 ```
-Based on the cramer V result, gear has a very strong, statistically significant association with am. cyl has a moderate, statistically significant association with am. carb has a moderate association, but it is not statistically significant.
+*Key insight*: The results indicate that Petal.Length and Sepal.Width have statistically significant associations with the target variable, suggesting they are valuable predictors for classification. On the other hand, Noise1 and Noise2 show weak associations, making them less useful for predicting the target. 
 
-### Feature Importance via Information Gain
+
+### 5. Feature Importance via Information Gain
 Identify the most informative predictors using `info_gain()`.
 ```{r warnings=FALSE, message=FALSE}
 # Compute information gain with respect to 'am'
-info_gain_table <- info_gain(df_train, am ~ cyl + gear + carb)
-
-# View sorted features
-info_gain_table
+info_gain(train_data, Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width + Noise1 + Noise2)
 ```
-Based on the information gain result, gear provide the most information about `am`. cyl  variable provides some information, but less than gear. While it does contribute to the prediction, it’s not as strong a predictor of am as gear. Carb  provides no useful information for predicting am. Thus we will drop carb variable.
+*Key insight*: The information gain values show that Petal.Width provides the most information for predicting the target variable. Noise2 contributes very little to the prediction task, suggesting it should be dropped from the model.
 
+```{r}
+# drop Noise2 as it contribute to the model very little
+train_data <- train_data %>% 
+  select(-Noise2)
+```
+
+
+## Modeling
+
+### Logistic Regression Pipeline
+
+We use the `lr_pipeline()` function automates logistic regression training, tuning, and model saving.
+```{r warning=FALSE, message=FALSE}
+model_workflow <- lr_pipeline(
+  data = train_data,
+  target_col = "Species",
+  vfolds = 2,
+  grid_size = 1,
+  tuning_metric = "recall",
+  output_path = tempfile(fileext = ".rds")  # this is a temporary path, in an actual project, use the actual path
+)
+```
+
+#### LASSO Classification Model Coefficients
+Visualize the coefficients of the logistic regression model using `coeff_plot()`
+```{r fig.width=7}
+coeff_plot(model_workflow)
+```
+*Interpretation*: We can see that Petal.Width_Low and Petal.Length_Medium have the largest coefficients—positive and negative, respectively.
+
+
+## Evaluation on Test Set
+Generate predictions and probabilities on the test set:
 ```{r warnings=FALSE, message=FALSE}
-df_train <- df_train %>% select(-carb)
+lasso_modelOutputs <- test_data %>%
+  mutate(across(everything(), as.factor)) %>%
+  cbind(model_workflow %>% predict(test_data), 
+        model_workflow %>% predict(test_data, type = "prob")) %>%
+  mutate(Species = as.factor(Species))
+
+head(lasso_modelOutputs)
 ```
 
-
-## Function to Help with Modeling
-
-The `lr_pipeline()` function automates logistic regression training, tuning, and model saving.
+### Performance Metrics
+Calculate ROC AUC to evaluate model performance and plot the ROC curve using `roc_plot()`
 ```{r warnings=FALSE, message=FALSE}
-lasso_tuned_wflow <- lr_pipeline(df_train, "am", 5, 10, "recall", tempfile(fileext = ".rds"))
-lasso_tuned_wflow
+# Calculate roc metrics
+roc_metric <- roc_auc(
+  lasso_modelOutputs,
+  truth = Species,
+  .pred_setosa,
+  event_level = "second"
+)
+
+plot_path1 <- tempfile(fileext = ".png")
+
+roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
+         true_class = "Species",
+         predicted_probs = ".pred_setosa",
+         roc_auc_value = roc_metric$.estimate,
+         output_path = plot_path1)
+
 ```
 
-
-## Apply Model To Test Set
-Now we got our model, we will apply it to our test set.
-```{r warnings=FALSE, message=FALSE}
-lasso_modelOutputs <- df_test %>%
-  cbind(lasso_tuned_wflow %>% predict(df_test), 
-        lasso_tuned_wflow %>% predict(df_test, type = "prob"))
-
-lasso_modelOutputs
+```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
+knitr::include_graphics(plot_path1)
 ```
+*Interpretation*: We can see from the plot that our model achieved an AUC of 0.745, which is fairly modest. This result is expected since we intentionally added noise to the dataset and the dataset is still relatively small.
+
+
+#### Confusion Matrix
+Plot the confusion matrix using `cm_plot()` assess model performance:
+```{r fig.width=7, warning=FALSE}
+# Confusion matrix
+
+plot_path2 <- tempfile(fileext = ".png")
+
+cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, event_level = "second")$table |> 
+  as.data.frame() %>%
+  cm_plot(plot_path2)
+```
+
+```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
+knitr::include_graphics(plot_path2)
+```
+*Interpretation*: The confusion matrix shows that the model correctly classified 26 setosa and 60 other samples, but also misclassified 26 setosa as other and 14 other as setosa. This indicates that the model struggles with distinguishing setosa from other, particularly overpredicting the other class.
 
 
 # Conclusion
-The `predictdiabetes` package simplifies many common tasks in binary classification, from visualization and data preprocessing to model training and evaluation. We demonstrated its use with the `mtcars` dataset, but it is fully extensible to real-world classification problems like diabetes prediction.
+The `predictdiabetes` package simplifies key steps in binary classification, from EDA and preprocessing to model training and evaluation. This vignette demonstrates its capabilities using the Iris dataset, but the package can be extended to real-world classification tasks like diabetes prediction.
 
