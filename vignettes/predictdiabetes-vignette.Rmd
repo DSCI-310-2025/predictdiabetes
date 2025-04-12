@@ -214,7 +214,7 @@ roc_metric <- roc_auc(
   event_level = "second"
 )
 
-plot_path1 <- "../man/figures/VIGNETTE-rocplot.png"
+plot_path1 <- tempfile(fileext = ".png")
 
 roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
          true_class = "Species",
@@ -234,7 +234,7 @@ Plot the confusion matrix using `cm_plot()` assess model performance:
 ```{r fig.width=7, warning=FALSE, fig.width=7, fig.height=5}
 # Confusion matrix
 
-plot_path2 <- "../man/figures/VIGNETTE-cmplot.png"
+plot_path2 <- tempfile(fileext = ".png")
 
 cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, event_level = "second")$table |> 
   as.data.frame() %>%
