@@ -137,6 +137,7 @@ bar_plots <- categorical_bars(
 # Display plots in a 2x2 grid
 plots_grid(bar_plots, num_cols = 2)
 ```
+
 *Key Insight*: Petal.Length and Petal.Width has a better separation between classes (potential strong predictors) compare to other variables.
 
 
@@ -196,7 +197,7 @@ Generate predictions and probabilities on the test set:
 ```{r warnings=FALSE, message=FALSE}
 lasso_modelOutputs <- test_data %>%
   mutate(across(everything(), as.factor)) %>%
-  cbind(model_workflow %>% predict(test_data), 
+  cbind(model_workflow %>% predict(test_data),
         model_workflow %>% predict(test_data, type = "prob")) %>%
   mutate(Species = as.factor(Species))
 
@@ -217,10 +218,10 @@ roc_metric <- roc_auc(
 plot_path1 <- "../man/figures/VIGNETTE-rocplot.png"
 
 roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
-         true_class = "Species",
-         predicted_probs = ".pred_setosa",
-         roc_auc_value = roc_metric$.estimate,
-         output_path = plot_path1)
+                     true_class = "Species",
+                     predicted_probs = ".pred_setosa",
+                     roc_auc_value = roc_metric$.estimate,
+                     output_path = plot_path1)
 ```
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
@@ -244,6 +245,7 @@ cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, e
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
 knitr::include_graphics(plot_path2)
 ```
+
 *Interpretation*: The confusion matrix shows that the model correctly classified 26 setosa and 60 other samples, but also misclassified 26 setosa as other and 14 other as setosa. This indicates that the model struggles with distinguishing setosa from other, particularly overpredicting the other class.
 
 

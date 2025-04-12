@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+…
 [![R-CMD-check](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/DSCI-310-2025/predictdiabetes/graph/badge.svg)](https://app.codecov.io/gh/DSCI-310-2025/predictdiabetes)
@@ -23,25 +24,34 @@ applicable to other models.
 - `na_count_type`: Given an input data frame, check for the number of
   missing values (NA), the number of distinct values, and the data type
   of each variable.
+
 - `category_target`: Given an input dataframe with a categorical
   variable, return the number and proportion of instances with each
   category value, in alphabetical (for characters and logical) or
   numerical (for integers) order
+
 - `categorical_bars`: Create a list of bar plots for each categorical
   variable in a data frame.
+
 - `info_gain`: Calculate and sort information gain for feature
   selection.
+
 - `plots_grid`: Combine a list or mulitple lists of `ggplot2` objects
   into a single grid layout using `patchwork`. The number of columns in
   the grid can be specified with `num_cols`.
+
 - `cramer_chi_results`: Runs chi-squared tests and calculates Cramer’s V
   independently for each variable in a given data frame.
+
 - `lr_pipeline`: Trains and fits a logistic regression model and
   cross-validates for optimal hyperparameter values.
+
 - `roc_plot`: Creates an ROC curve plot and saves it to the specified
   file path.
+
 - `cm_plot`: Creates a confusion matrix plot and saves it to the
   specified file path.
+
 - `coeff_plot`: Plot LASSO classification model coefficients.
 
 ## Installation
@@ -63,14 +73,14 @@ distinct values and the data type in each column.
 library(predictdiabetes)
 
 na_count_type(mtcars)
-#>                   mpg      cyl      disp     hp       drat     wt      
-#> NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     
-#> Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    
-#> Current_Data_Type "double" "double" "double" "double" "double" "double"
-#>                   qsec     vs       am       gear     carb    
-#> NA_Count          "0"      "0"      "0"      "0"      "0"     
-#> Distinct_Count    "30"     "2"      "2"      "3"      "6"     
-#> Current_Data_Type "double" "double" "double" "double" "double"
+#>                   mpg      cyl       disp     hp       drat     wt      
+#> NA_Count          "0"      "0"       "0"      "0"      "0"      "0"     
+#> Distinct_Count    "25"     "3"       "27"     "22"     "22"     "29"    
+#> Current_Data_Type "double" "integer" "double" "double" "double" "double"
+#>                   qsec     vs       am        gear      carb    
+#> NA_Count          "0"      "0"      "0"       "0"       "0"     
+#> Distinct_Count    "30"     "2"      "2"       "3"       "6"     
+#> Current_Data_Type "double" "double" "integer" "integer" "double"
 #>                   mpg      cyl      disp     hp       drat     wt      
 #> NA_Count          "0"      "0"      "0"      "0"      "0"      "0"     
 #> Distinct_Count    "25"     "3"      "27"     "22"     "22"     "29"    
@@ -112,21 +122,14 @@ evaluate how your model would perform.
 ``` r
 set.seed(42)
 
-test_data <- data.frame(
-  Diabetes_binary = factor(sample(c(0, 1), 100, replace = TRUE)),
-  .pred_1 = runif(100)
+conf_matrix_df <- data.frame(
+  Prediction = c("Positive", "Negative", "Positive", "Negative"),
+  Truth = c("Positive", "Positive", "Negative", "Negative"),
+  Freq = c(50, 10, 5, 100)
 )
+plot <- cm_plot(conf_matrix_df, tempfile(fileext = ".png"))
 
-output_plot <- roc_plot(
-  test_data,
-  "Diabetes_binary",
-  ".pred_1",
-  0.85,
-  tempfile(fileext = ".png")  # This doesn't create an actual file
-)
-#> Saving 7 x 7 in image
-
-plot(output_plot)
+plot(plot)
 ```
 
-<img src="man/figures/README-output_plot-1.png" width="100%" />
+<img src="man/figures/README-cm_plot-1.png" width="100%" />
