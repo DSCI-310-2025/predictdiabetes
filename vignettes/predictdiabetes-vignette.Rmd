@@ -1,5 +1,5 @@
 ---
-title: "PredictDiabetes Vignette: Classification with Iris Dataset"
+title: "predictdiabetes Vignette: Classification with Iris Dataset"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{predictdiabetes-vignette}
@@ -225,7 +225,6 @@ roc_plot <- roc_plot(model_outputs = lasso_modelOutputs,
 ```
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
-knitr::include_graphics(plot_path1)
 roc_plot
 ```
 *Interpretation*: We can see from the plot that our model achieved an AUC of 0.745, which is fairly modest. This result is expected since we intentionally added noise to the dataset and the dataset is still relatively small.
@@ -244,7 +243,6 @@ cm_df <- conf_mat(lasso_modelOutputs, truth = Species, estimate = .pred_class, e
 ```
 
 ```{r, echo=FALSE, fig.align="center", dpi=150, fig.height=5, fig.width=5, out.width="60%"}
-knitr::include_graphics(plot_path2)
 cm_df
 ```
 
