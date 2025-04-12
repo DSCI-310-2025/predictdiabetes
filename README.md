@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+…
 [![R-CMD-check](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DSCI-310-2025/predictdiabetes/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/DSCI-310-2025/predictdiabetes/graph/badge.svg)](https://app.codecov.io/gh/DSCI-310-2025/predictdiabetes)

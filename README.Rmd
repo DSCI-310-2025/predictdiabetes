@@ -34,7 +34,6 @@ The goal of `predictdiabetes` is to provide functions that are useful for develo
 - `cramer_chi_results`: Runs chi-squared tests and calculates Cramer's V independently for each variable in a given data frame.
 
 - `lr_pipeline`: Trains and fits a logistic regression model and cross-validates for optimal  hyperparameter values.
-
 - `roc_plot`: Creates an ROC curve plot and saves it to the specified file path.
 - `cm_plot`: Creates a confusion matrix plot and saves it to the specified file path.
 - `coeff_plot`: Plot LASSO classification model coefficients.
