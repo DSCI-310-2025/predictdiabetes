@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   predictdiabetes-vignette: predictdiabetes-vignette.html
-last_built: 2025-04-13T06:47Z
+last_built: 2025-04-13T06:54Z
 urls:
   reference: https://dsci-310-2025.github.io/predictdiabetes/reference
   article: https://dsci-310-2025.github.io/predictdiabetes/articles
