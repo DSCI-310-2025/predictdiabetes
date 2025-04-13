@@ -18,6 +18,8 @@ designed for a logistic regression prediction model of diabetes risk
 based on BRFSS health indicators, but the package is designed to be
 applicable to other models.
 
+This package is situated within the R ecosystem and complements existing modeling packages such as `caret`, `glmnet`, and `tidymodels`. While those frameworks offer comprehensive pipelines for model training and tuning, predictdiabetes focuses specifically on exploratory data analysis, feature selection, and visualization techniques tailored to binary classification using logistic regression. Compared to broader machine learning packages, `predictdiabetes` offers a streamlined approach for building and evaluating logistic regression models, with built-in plots and helper functions that reduce the need for boilerplate code.
+
 ## Functions
 
 - `na_count_type`: Given an input data frame, check for the number of
